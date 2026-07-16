@@ -18,10 +18,6 @@ const HeroSection = ({ landingContent, scrollToFeaturedCollection }) => {
 
   const gif = [
     "/gif/Piano-1.gif",
-    "/gif/Lab-2.gif",
-    "/gif/tv-crash-3.gif",
-    "/gif/screen-4.gif",  
-    "/gif/drumming-5.gif",
   ];
 
   return (
@@ -51,11 +47,9 @@ const HeroSection = ({ landingContent, scrollToFeaturedCollection }) => {
 
         {/* TOP ROW */}
         <div className="top-row">
-          {gif.slice(0, 3).map((item, index) => (
-            <div key={index} className="gif-card">
-              <img src={item} alt="gif" />
-            </div>
-          ))}
+          <div className="gif-card">
+            <img src={gif[0]} alt="gif" />
+          </div>
         </div>
 
         {/* BOTTOM ROW */}
@@ -63,7 +57,6 @@ const HeroSection = ({ landingContent, scrollToFeaturedCollection }) => {
 
           {/* LEFT GIF */}
           <div className="bottom-gif">
-            <img src={gif[3]} alt="gif" />
           </div>
 
           {/* LOTUS CENTER */}
@@ -81,7 +74,6 @@ const HeroSection = ({ landingContent, scrollToFeaturedCollection }) => {
 
           {/* RIGHT GIF */}
           <div className="bottom-gif">
-            <img src={gif[4]} alt="gif" />
           </div>
 
         </div>
