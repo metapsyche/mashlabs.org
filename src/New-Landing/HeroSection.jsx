@@ -1,8 +1,7 @@
-import React from 'react';
 import { FiArrowUpRight } from "react-icons/fi";
 import "./Hero.css";
 
-const HeroSection = ({ landingContent, scrollToFeaturedCollection }) => {
+const HeroSection = ({ landingContent }) => {
 
   const heroData = landingContent?.documents?.find(
     doc => doc.sectionId === "heroSection"
@@ -95,16 +94,18 @@ const HeroSection = ({ landingContent, scrollToFeaturedCollection }) => {
             "Browse a curated library of world-class creators. Mash their best work to create rare NFTs that grow in value as the artists do."}
         </p>
 
-        <button
-          onClick={scrollToFeaturedCollection}
+        <a
+          href="https://www.mashlabs.xyz/apply"
+          target="_blank"
           className="hero-button"
+          rel="noopener noreferrer"
         >
-          <span>Learn More</span>
+          <span>JOIN NOW</span>
 
           <div className="button-icon-box">
             <FiArrowUpRight className="text-white text-lg" />
           </div>
-        </button>
+        </a>
 
       </div>
 

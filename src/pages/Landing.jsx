@@ -286,12 +286,15 @@ export default function Landing() {
           <div className="sub">
             to create unique multimedia digital collectibles
           </div>
-          <button
+          <a
             className="button makemash"
-            onClick={() => scrollToFeaturedCollection()}
+            href="https://www.mashlabs.xyz/apply"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ textDecoration: 'none', display: 'inline-block' }}
           >
-            LEARN MORE
-          </button>
+            JOIN NOW
+          </a>
         </div>
         <video
           src="/mash-header-2.mp4"

@@ -207,17 +207,11 @@ export default function Starter() {
       });
   }, []);
 
-  const scrollToFeaturedCollection = () => {
-    const communitySection = document.getElementById('community-section');
-    communitySection?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
     <main className="">
       {/* Hero Section */}
       <HeroSection 
         landingContent={landingContent} 
-        scrollToFeaturedCollection={scrollToFeaturedCollection} 
       />
 
       {/* Community Section with Links */}

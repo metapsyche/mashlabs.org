@@ -367,6 +367,7 @@
     font-weight: 600;
     background: radial-gradient(100.88% 63.54% at 50% -13.54%, #CCA4FE 0%, #5556BC 100%);
     cursor: pointer;
+    text-decoration: none;
 }
 
 .button-icon-box {
