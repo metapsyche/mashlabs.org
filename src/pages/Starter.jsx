@@ -48,14 +48,14 @@ export default function Starter() {
           </p>
           <div className="Starter-buttonContainer">
             <a
-              // href="https://ge20ditxv6v.typeform.com/to/r2xwqqvo"
-               href="https://ge20ditxv6v.typeform.com/to/blDeq6w5"
+              // href=""
+               href=""
               className="Starter-button"
             >
               CREATOR
             </a>
             <a
-              href="https://ge20ditxv6v.typeform.com/to/kNKjKwGm"
+              href=""
               className="Starter-button"
             >
               COLLECTOR
@@ -146,7 +146,7 @@ export default function Starter() {
 
 {/* New Landing Page Code Below */}
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 //import "./Starter.scss";
 import HeroSection from "../New-Landing/HeroSection";
 import Community from "../New-Landing/Community";
@@ -154,10 +154,6 @@ import MoreSection from "../New-Landing/MoreSection";
 import CommunityFooter from "../New-Landing/CommunityFooter";
 
 export default function Starter() {
-  const LINKS = {
-    creator: "https://ge20ditxv6v.typeform.com/to/blDeq6w5",
-    collector: "https://ge20ditxv6v.typeform.com/to/kNKjKwGm",
-  };
 
   // ✅ Default fallback content (SAFE OPTION)
   const defaultLandingContent = {
@@ -228,8 +224,6 @@ export default function Starter() {
       <div id="community-section" className="md:mt-70 relative z-20">
         <Community 
           landingContent={landingContent} 
-          creatorLink={LINKS.creator}
-          collectorLink={LINKS.collector}
         />
       </div>
 

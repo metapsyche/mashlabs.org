@@ -1,7 +1,4 @@
-import React from "react";
-import { FiArrowUpRight } from "react-icons/fi";
-
-const Community = ({ landingContent, creatorLink, collectorLink }) => {
+const Community = ({ landingContent }) => {
   const headingStyle = {
     textShadow: "0 4px 80px rgba(255, 255, 255, 0.30)",
     letterSpacing: "-3.52px",
@@ -48,9 +45,8 @@ const Community = ({ landingContent, creatorLink, collectorLink }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
           
           {/* ================= CREATORS CARD ================= */}
-          <a
-            href={creatorLink}
-            className="group relative overflow-hidden rounded-[20px] p-6 lg:p-12 border border-white/5 cursor-pointer block transition-all duration-700 hover:scale-[1.02]"
+          <div
+            className="group relative overflow-hidden rounded-[20px] p-6 lg:p-12 border border-white/5 block transition-all duration-700 hover:scale-[1.02]"
           >
             {/* Background */}
             <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
@@ -77,7 +73,7 @@ const Community = ({ landingContent, creatorLink, collectorLink }) => {
                 </div>
               </div>
 
-              <div className="space-y-8 mb-12 flex-grow">
+              <div className="space-y-8 flex-grow">
                 {creatorItems.map((item, idx) => (
                     <p
                       key={idx}
@@ -88,19 +84,12 @@ const Community = ({ landingContent, creatorLink, collectorLink }) => {
                   )
                 )}
               </div>
-
-              {/* BUTTON */}
-              <div className="inline-flex w-[190px] h-[48px] font-[600] justify-center items-center gap-[6px] rounded-[10px] border border-white/40 text-white transition-all duration-300 group-hover:bg-white group-hover:text-black">
-                Join as Artist/ Musician
-                <FiArrowUpRight className="text-current text-lg transition-transform duration-300 group-hover:rotate-45" />
-              </div>
             </div>
-          </a>
+          </div>
 
           {/* ================= COLLECTORS CARD ================= */}
-          <a
-            href={collectorLink}
-            className="group relative overflow-hidden rounded-[20px] p-6 lg:p-12 border border-white/5 cursor-pointer block transition-all duration-700 hover:scale-[1.02]"
+          <div
+            className="group relative overflow-hidden rounded-[20px] p-6 lg:p-12 border border-white/5 block transition-all duration-700 hover:scale-[1.02]"
           >
             {/* Background */}
             <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
@@ -127,7 +116,7 @@ const Community = ({ landingContent, creatorLink, collectorLink }) => {
                 </div>
               </div>
 
-              <div className="space-y-8 mb-12 flex-grow">
+              <div className="space-y-8 flex-grow">
                 <p className="text-[#FFFFFFCC] text-[14px] md:text-[18px] font-[400] max-w-sm leading-relaxed group-hover:text-white transition-colors">
                   {parts[0]}{" "}
                   {/*<span className="text-white font-medium border-b border-white/20">
@@ -148,14 +137,8 @@ const Community = ({ landingContent, creatorLink, collectorLink }) => {
                   {collectorItems[2]?.description}
                 </p>
               </div>
-
-              {/* BUTTON */}
-              <div className="inline-flex w-[190px] h-[48px] font-[600] justify-center items-center gap-[6px] rounded-[10px] border border-white/40 text-white transition-all duration-300 group-hover:bg-white group-hover:text-black">
-                Join as Fan/ Collector
-                <FiArrowUpRight className="text-current text-lg transition-transform duration-300 group-hover:rotate-45" />
-              </div>
             </div>
-          </a>
+          </div>
 
         </div>
       </div>
