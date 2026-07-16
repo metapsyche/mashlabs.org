@@ -36,6 +36,16 @@ const HeroSection = ({ landingContent, scrollToFeaturedCollection }) => {
         />
       </div>
 
+      {/* Join Now Button */}
+      <div className="join-button-container">
+        <a
+          href="https://www.mashlabs.xyz/apply"
+          className="join-button"
+        >
+          JOIN NOW
+        </a>
+      </div>
+
       {/* Background */}
       <div className="hero-bg">
 
