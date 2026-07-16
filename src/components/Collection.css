@@ -1,0 +1,9 @@
+.tags {
+  padding-top: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.collectionMint {
+  font-weight: bold;
+}

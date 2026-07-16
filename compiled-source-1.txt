@@ -1,0 +1,2282 @@
+
+
+--- START OF FILE: src\components\MediaSelectionWidget.jsx ---
+
+import React, { useContext, useEffect, useState } from "react";
+import "./MediaSectionWidget.scss";
+import { AiOutlinePlus } from "react-icons/ai";
+import { RiVideoLine } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
+import { LuMusic } from "react-icons/lu";
+import { MediaContext } from "../context/MediaContext";
+import { RxCross2 } from "react-icons/rx";
+export default function MediaSelectorWidget() {
+  const { globalAudios, setGlobalAudios, globalVideos, setGlobalVideos } =
+    useContext(MediaContext);
+
+  const navigate = useNavigate();
+
+  const [renderableVisualCards, setRenderableVisualCards] = useState([]);
+  const [renderableAudioCards, setRenderableAudioCards] = useState([]);
+
+  useEffect(() => {
+    if (globalVideos.length < 5) {
+      setRenderableVisualCards(() => {
+        if (globalVideos.length >= 5) return globalVideos;
+        const emptyVideoArray = [];
+        for (let i = globalVideos.length; i < 5; i++) {
+          emptyVideoArray.push({ emptyCard: true, id: "e" + i });
+        }
+        return [...globalVideos, ...emptyVideoArray];
+      });
+    } else {
+      setRenderableVisualCards(globalVideos);
+    }
+  }, [globalVideos]);
+
+  useEffect(() => {
+    if (globalAudios.length < 5) {
+      setRenderableAudioCards(() => {
+        if (globalAudios.length >= 5) return globalAudios;
+        const emptyAudioArray = [];
+        for (let i = globalAudios.length; i < 5; i++) {
+          emptyAudioArray.push({ emptyCard: true, id: "e" + i });
+        }
+        return [...globalAudios, ...emptyAudioArray];
+      });
+    } else {
+      setRenderableAudioCards(globalAudios);
+    }
+  }, [globalAudios]);
+
+  function removeAudio(index) {
+    console.log("removing audio at index " + index);
+    setGlobalAudios((audiosArray) => {
+      if (index >= 0 && index < audiosArray.length) {
+        const updatedArray = [...audiosArray];
+        updatedArray.splice(index, 1); // Remove 1 element at the given index
+        return updatedArray;
+      }
+    });
+  }
+
+  function removeVideo(index) {
+    console.log("removing" + index);
+    setGlobalVideos((videosArray) => {
+      if (index >= 0 && index < videosArray.length) {
+        const updatedArray = [...videosArray];
+        updatedArray.splice(index, 1); // Remove 1 element at the given index
+        return updatedArray;
+      }
+    });
+  } 
+  
+
+  return (
+    visible() && (
+      <div className="mediawidgetcontainer">
+        <div className="mediawidget">
+          <div className="top">
+            <div className="text">Select audio art</div>
+            <div className="mediaicons">
+              <div
+                className={`mediawidgetcard ${
+                  location.pathname === "/videos" ? "active" : ""
+                }`}
+                onClick={() => navigate("/videos")}
+              >
+                <div className="videos iconIcon">
+                  <RiVideoLine />
+                </div>
+                <div className="cardtext">Visual Art</div>
+              </div>
+              <div
+                className={`mediawidgetcard ${
+                  location.pathname === "/audios" ? "active" : ""
+                }`}
+                onClick={() => navigate("/audios")}
+              >
+                <div className="music iconIcon">
+                  <LuMusic />
+                </div>
+                <div className="cardtext">Audio Tracks</div>
+              </div>
+            </div>
+          </div>
+          <div className="cards">
+            {location.pathname == "/audios" ? (
+              renderableAudioCards.map((audio, index) => {
+                return audio.emptyCard ? (
+                  <EmptyMediaSelectorCard />
+                ) : (
+                  <MediaWidgetCard
+                    image={audio.art}
+                    remove={() => removeAudio(index)}
+                  />
+                );
+              })
+            ) : location.pathname == "/videos" ? (
+              renderableVisualCards.map((video, index) => {
+                return video.emptyCard ? (
+                  <EmptyMediaSelectorCard />
+                ) : (
+                  <MediaWidgetCard
+                    image={video.thumbnail}
+                    remove={() => removeVideo(index)}
+                  />
+                );
+              })
+            ) : (
+              <EmptyMediaSelectorCard />
+            )}
+          </div>
+          <div className="button" onClick={() => navigate("/mashboard")}>
+            GO TO MASHBOARD
+          </div>
+        </div>
+      </div>
+    )
+  );
+}
+
+function visible() {
+  return location.pathname == "/audios" || location.pathname == "/videos";
+}
+
+function EmptyMediaSelectorCard() {
+  return (
+    <div className="mediawidgetcard">
+      <AiOutlinePlus />
+    </div>
+  );
+}
+function MediaWidgetCard({ image, remove }) {
+  return (
+    <div className="mediawidgetcard">
+      <div className="remove" onClick={remove}>
+        <RxCross2 />
+      </div>
+      <img src={image} alt="" />
+    </div>
+  );
+}
+
+
+--- END OF FILE: src\components\MediaSelectionWidget.jsx ---
+
+
+
+--- START OF FILE: src\context\MediaContext.jsx ---
+
+// MediaContext.js
+import React, { createContext, useState } from "react";
+
+export const MediaContext = createContext();
+
+export const MediaProvider = ({ children }) => {
+  const [globalAudios, setGlobalAudios] = useState([]);
+  const [globalVideos, setGlobalVideos] = useState([]);
+
+  return (
+    <MediaContext.Provider
+      value={{
+        globalAudios,
+        setGlobalAudios,
+        globalVideos,
+        setGlobalVideos,
+      }}
+    >
+      {children}
+    </MediaContext.Provider>
+  );
+};
+
+
+
+
+--- END OF FILE: src\context\MediaContext.jsx ---
+
+
+
+--- START OF FILE: src\pages\Landing.jsx ---
+
+import { Button, Input } from "@mui/base";
+import "./Landing.scss";
+import { FaDiscord, FaEnvelope, FaInstagram, FaTwitter } from "react-icons/fa";
+import { useEffect, useRef, useState } from "react";
+import GetSet from "../components/GetSet";
+import CompactCollection from "../components/CompactCollection";
+import Separator from "../components/Separator";
+import ScrollableContainer from "../components/ScrollableContainer";
+import { CollectionCard, MediaCard } from "./Profile";
+import { collection1, collection2 } from "../server/data";
+import fimg from "/images/footer-mash.png";
+import ScrollableContainer2 from "../components/ScrollableContainer2";
+import { FullArt } from "../components/FullArt";
+
+export default function Landing() {
+  const [largeCollectionData, setLargeCollection] = useState({
+    name: "Sintela",
+    musician: "Open Skies",
+    musicianAvatar: "/images/musician1.png",
+    musicianCountry: "Australia",
+    musicianCountryAbbriviation: "AUS",
+    musicianCity: "Perth",
+    musicianDescription:
+      "Open Skies is the project of two brothers who are crafting unique and stirring compositions with both classical and acoustic elements to inspire your imagination.",
+    musicanTags: ["feel good", "acoustic", "folk", "travel"],
+    visualArtist: "Bjorn Rademaker",
+    visualArtistAvatar: "/images/artist1.png",
+    visualArtistCountry: "Netherlands",
+    visualArtistCountryAbbriviation: "NLD",
+    visualArtistCity: "Amsterdam",
+    visualArtistDescription:
+      "Bjorn Rademaker is a Dutch artist best known for his early illustrated series. After further work in traditional painting, Rademaker started using digital tools and moved to use free and open-source software where he's continued create collaborative beautiful stories.",
+    visualArtistTags: ["animation", "fantasy", "CGI"],
+    description:
+      "This is the story of a woman who embarks on a quest to find her lost dragon companion. Through flashbacks, their bond is revealed, but the young dragon is later captured by an adult dragon. As our heroin is determined to rescue him, she confronts the dragon but tragically comes to find she made a fatal mistake. The film explores themes of loyalty, loss, and the consequences of obsession.",
+    image: "/images/largeCoverTeaser.png",
+    learnMoreLink: "https://medium.com/search?q=mashlabs.xyz",
+    totalMashes: 100,
+    mashesLeft: 18,
+  });
+  const [compactCollections, setCompactCollections] = useState([
+    {
+      name: "Harmony in Dreams",
+      musician: "Yuri",
+      musicianAvatar: "/images/musician5.png",
+      musicianCountry: "Russia",
+      musicianCountryAbbriviation: "RUS",
+      musicianCity: "Voronezh",
+      musicanTags: ["ambient", "electronic", "spacey"],
+      visualArtist: "Ivanna",
+      visualArtistAvatar: "/images/artist5.png",
+      visualArtistCountry: "Ukrain",
+      visualArtistCountryAbbriviation: "UKR",
+      visualArtistCity: "Poltava",
+      visualArtistTags: ["abstract"],
+      videoUrl: "/videos/harmonyindreams.mp4",
+      audioLink: "/audio/harmonyindreams.mp3",
+      totalMashes: 650,
+      mashesLeft: 88,
+    },
+    {
+      name: "Those Were The Days",
+      musician: "Fre$hah",
+      musicianAvatar: "/images/musician2.jpg",
+      musicianCountry: "Senegai",
+      musicianCountryAbbriviation: "SEN",
+      musicianCity: "Dakar",
+      musicanTags: ["jazzbeats", "in the zone", "romantic"],
+      visualArtist: "Charlie Frey",
+      visualArtistAvatar:
+        "https://images.unsplash.com/photo-1495121553079-4c61bcce1894?q=80&w=1581&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      visualArtistCountry: "United States of America",
+      visualArtistCountryAbbriviation: "USA",
+      visualArtistCity: "Trenton",
+      visualArtistTags: ["black&white", "city", "vintage", "film"],
+      videoUrl: "/collection1/vacationcity.mp4",
+      audioLink: "/collection1/tightroots.mp3",
+      totalMashes: 70,
+      mashesLeft: 11,
+      collectionId: 1,
+    },
+    {
+      name: "Player Orc",
+      musician: "Amarthi",
+      musicianAvatar: "/images/musician3.png",
+      musicianCountry: "Italy",
+      musicianCountryAbbriviation: "ITA",
+      musicianCity: "Naples",
+      musicanTags: ["metal", "doom", "gym"],
+      visualArtist: "Tej",
+      visualArtistAvatar: "/collection2/barehands.gif",
+      visualArtistCountry: "India",
+      visualArtistCountryAbbriviation: "IND",
+      visualArtistCity: "Hyderabad",
+      visualArtistTags: ["orc", "fantasy", "gaming"],
+      // videoUrl: "/videos/fantastical.mp4",
+      audioLink: "/audio/audio3.mp3",
+      totalMashes: 444,
+      mashesLeft: 31,
+      collectionId: 2,
+    },
+    {
+      name: "Keep Going",
+      musician: "Familia Pacifica",
+      musicianAvatar: "/images/musician4.png",
+      musicianCountry: "United States of America",
+      musicianCountryAbbriviation: "USA",
+      musicianCity: "Los Angeles",
+      musicanTags: ["lofi", "chill", "pensive"],
+      visualArtist: "Minjun",
+      visualArtistAvatar: "/images/artist44.png",
+      visualArtistCountry: "Korea",
+      visualArtistCountryAbbriviation: "KOR",
+      visualArtistCity: "Daejeon",
+      visualArtistTags: ["anime"],
+      videoUrl: "/videos/keepgoing.mp4",
+      audioLink: "/audio/keepgoing.mp3",
+      totalMashes: 1000,
+      mashesLeft: 520,
+    },
+    {
+      name: "It's (Still) a Beautiful World",
+      musician: "Mei Li",
+      musicianAvatar: "/images/musician6.png",
+      musicianCountry: "China",
+      musicianCountryAbbriviation: "CHN",
+      musicianCity: "Yushi",
+      musicanTags: ["peaceful", "piano", "melancholy"],
+      visualArtist: "Alisher Naviev",
+      visualArtistAvatar:
+        "https://images.unsplash.com/photo-1500534623283-312aade485b7?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      visualArtistCountry: "Tijkistan",
+      visualArtistCountryAbbriviation: "TJK",
+      visualArtistCity: "Dushanbe",
+      visualArtistTags: ["nature"],
+      audioLink: "/audio/carryingyou.mp3",
+      totalMashes: 250,
+      mashesLeft: 44,
+    },
+  ]);
+  const artists = [
+    {
+      name: "Yuri",
+      description:
+        "Yuri is an ambient and electronic musician from Voronezh, Russia, known for creating spacey soundscapes that transport listeners to otherworldly realms.",
+      profilepicture: "/images/musician5.png",
+      walletaddress: "",
+      createdat: "",
+      location: {
+        country: "Russia",
+        countryAbbreviation: "RUS",
+        city: "Voronezh",
+      },
+      tags: ["ambient", "electronic", "spacey"],
+    },
+    {
+      name: "Ivanna",
+      description:
+        "Ivanna is an abstract visual artist from Poltava, Ukraine, whose works are characterized by their bold use of color and form, evoking deep emotional responses.",
+      profilepicture: "/images/artist5.png",
+      walletaddress: "",
+      createdat: "",
+      location: {
+        country: "Ukraine",
+        countryAbbreviation: "UKR",
+        city: "Poltava",
+      },
+      tags: ["abstract"],
+    },
+    {
+      name: "Fre$hah",
+      description:
+        "Fre$hah is a jazzbeat musician from Dakar, Senegal, bringing a romantic and in-the-zone vibe to the music scene with his unique sound.",
+      profilepicture: "/images/musician2.jpg",
+      walletaddress: "",
+      createdat: "",
+      location: {
+        country: "Senegal",
+        countryAbbreviation: "SEN",
+        city: "Dakar",
+      },
+      tags: ["jazzbeats", "in the zone", "romantic"],
+    },
+    {
+      name: "Charlie Frey",
+      description:
+        "Charlie Frey is a visual artist from Trenton, USA, who specializes in black & white, city, vintage, and film photography, capturing timeless moments.",
+      profilepicture:
+        "https://images.unsplash.com/photo-1495121553079-4c61bcce1894?q=80&w=1581&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      walletaddress: "",
+      createdat: "",
+      location: {
+        country: "United States of America",
+        countryAbbreviation: "USA",
+        city: "Trenton",
+      },
+      tags: ["black&white", "city", "vintage", "film"],
+    },
+    {
+      name: "Amarthi",
+      description:
+        "Amarthi is a metal musician from Naples, Italy, known for his heavy and doom-filled tracks that resonate in gym playlists worldwide.",
+      profilepicture: "/images/musician3.png",
+      walletaddress: "",
+      createdat: "",
+      location: {
+        country: "Italy",
+        countryAbbreviation: "ITA",
+        city: "Naples",
+      },
+      tags: ["metal", "doom", "gym"],
+    },
+    {
+      name: "Tej",
+      description:
+        "Tej is a fantasy visual artist from Hyderabad, India, whose work features orcs and other mythical creatures, bringing fantasy gaming worlds to life.",
+      profilepicture: "/collection2/barehands.gif",
+      walletaddress: "",
+      createdat: "",
+      location: {
+        country: "India",
+        countryAbbreviation: "IND",
+        city: "Hyderabad",
+      },
+      tags: ["orc", "fantasy", "gaming"],
+    },
+    {
+      name: "Familia Pacifica",
+      description:
+        "Familia Pacifica is a lofi and chill musician from Los Angeles, USA, creating pensive soundtracks perfect for relaxation and reflection.",
+      profilepicture: "/images/musician4.png",
+      walletaddress: "",
+      createdat: "",
+      location: {
+        country: "United States of America",
+        countryAbbreviation: "USA",
+        city: "Los Angeles",
+      },
+      tags: ["lofi", "chill", "pensive"],
+    },
+    {
+      name: "Minjun",
+      description:
+        "Minjun is an anime visual artist from Daejeon, Korea, whose work captures the vibrant and dynamic essence of anime culture.",
+      profilepicture: "/images/artist44.png",
+      walletaddress: "",
+      createdat: "",
+      location: {
+        country: "Korea",
+        countryAbbreviation: "KOR",
+        city: "Daejeon",
+      },
+      tags: ["anime"],
+    },
+    {
+      name: "Mei Li",
+      description:
+        "Mei Li is a peaceful piano musician from Yushi, China, whose melancholic melodies bring a sense of serenity and introspection to listeners.",
+      profilepicture: "/images/musician6.png",
+      walletaddress: "",
+      createdat: "",
+      location: {
+        country: "China",
+        countryAbbreviation: "CHN",
+        city: "Yushi",
+      },
+      tags: ["peaceful", "piano", "melancholy"],
+    },
+    {
+      name: "Alisher Naviev",
+      description:
+        "Alisher Naviev is a nature visual artist from Dushanbe, Tajikistan, capturing the beauty of the natural world in his stunning photography.",
+      profilepicture:
+        "https://images.unsplash.com/photo-1500534623283-312aade485b7?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      walletaddress: "",
+      createdat: "",
+      location: {
+        country: "Tajikistan",
+        countryAbbreviation: "TJK",
+        city: "Dushanbe",
+      },
+      tags: ["nature"],
+    },
+  ];
+  const videoRef = useRef(null);
+  const [realArtists, setRealArtists] = useState([]);
+  const [playing, setPlaying] = useState(false);
+  const [selected, setSelected] = useState(null);
+  const sections = [
+    {
+      name: "Works",
+      id: "works",
+    },
+    {
+      name: "Collections",
+      id: "collections",
+    },
+    {
+      name: "Artists",
+      id: "artists",
+    },
+  ];
+  const [selectedOption, setSelectedOption] = useState("works");
+  const collection = collection1;
+  const [realArtistSongs, setRealArtistSongs] = useState([]);
+  const [realArtist2media, setRealArtist2media] = useState([]);
+
+  useEffect(() => {
+    fetch("https://mash-server.onrender.com/artists")
+      .then((data) => data.json())
+      .then((data) => {
+        console.log(data);
+        if (data.error) return;
+        setRealArtists(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    fetch("https://mash-server.onrender.com/artists/2/solo-works")
+      .then((data) => data.json())
+      .then((data) => {
+        console.log(data);
+        setRealArtistSongs(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    fetch("https://mash-server.onrender.com/artists/1/solo-works")
+      .then((data) => data.json())
+      .then((data) => {
+        console.log(data);
+        setRealArtist2media(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    if (videoRef.current) {
+      // Programmatically play the video
+      videoRef.current.play().catch((error) => {
+        console.error("Autoplay failed:", error);
+      });
+    }
+  }, []);
+
+  // Create a ref for the featured collection section
+  const featuredCollectionRef = useRef(null);
+
+  // Scroll handler for the Learn More button
+  const scrollToFeaturedCollection = () => {
+    if (featuredCollectionRef.current) {
+      featuredCollectionRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  return (
+    <div className="landing">
+      <div className="hero">
+        <div className="text">
+          <div className="top">Discover + Invest</div>
+          <div>In Emerging Musicians & Artists </div>
+          <div>From Around The World</div>
+          <div className="sub subpadding">
+            Choosing and mashing music and visual elements
+          </div>
+          <div className="sub">
+            to create unique multimedia digital collectibles
+          </div>
+          <button
+            className="button makemash"
+            onClick={() => scrollToFeaturedCollection()}
+          >
+            LEARN MORE
+          </button>
+        </div>
+        <video
+          src="/mash-header-2.mp4"
+          alt=""
+          ref={videoRef}
+          loop
+          muted
+          playsInline
+        />
+      </div>
+      <div className="landingContent">
+        <div className="content">
+          <div className="section" ref={featuredCollectionRef}>
+            {/* {largeCollectionData && (
+              <LargeCollection data={largeCollectionData} />
+            )} */}
+
+            <GetSet></GetSet>
+          </div>
+          <div className="section">
+            <div className="sectionTitle">Featured Content</div>
+            <div className="br"></div>
+            <ScrollableContainer2>
+              {realArtistSongs.length > 2 &&
+                realArtist2media.length > 2 &&
+                [
+                  realArtistSongs[0],
+                  realArtist2media[0],
+                  realArtistSongs[1],
+                  realArtist2media[1],
+                  realArtistSongs[2],
+                  realArtist2media[2],
+                ]?.map((media, index) => {
+                  return (
+                    <CollectionCard
+                      key={index}
+                      img={media?.image_url}
+                      title={media.file_name}
+                      subtitle={media.title}
+                      scarcity={media.scarcity}
+                    />
+                  );
+                })}
+            </ScrollableContainer2>
+          </div>
+          <div className="section mediaSection">
+            <div className="options">
+              {sections.map((section, index) => {
+                return (
+                  <div
+                    key={index}
+                    className={`option ${
+                      selectedOption == section.id ? "selectedOption" : ""
+                    }`}
+                    onClick={() => setSelectedOption(section.id)}
+                  >
+                    {section.name}
+                  </div>
+                );
+              })}
+            </div>
+            <div className="br"></div>
+            {selectedOption == "collections" ? (
+              <Collections collections={compactCollections} />
+            ) : selectedOption == "works" ? (
+              <ScrollableContainer2>
+                {collection?.audios
+                  ?.concat(collection2?.audios)
+                  .map((audio, index) => {
+                    return (
+                      <MediaCard
+                        key={index}
+                        title={audio.title}
+                        subtitle={audio.artist}
+                        img={audio.art}
+                        audio={audio.audioLink}
+                        playing={playing}
+                        setPlaying={setPlaying}
+                        selected={selected}
+                        setSelected={setSelected}
+                        index={index}
+                        fullVisibility={true}
+                      />
+                    );
+                  })}
+                {collection?.videos
+                  ?.concat(collection2?.videos)
+                  .map((audio, index) => {
+                    return (
+                      <MediaCard
+                        key={index}
+                        title={audio.title}
+                        subtitle={audio.artist}
+                        img={audio.thumbnail}
+                        index={index}
+                        fullVisibility={true}
+                      />
+                    );
+                  })}
+              </ScrollableContainer2>
+            ) : selectedOption == "artists" ? (
+              <ScrollableContainer2>
+                {realArtists?.concat(artists).map((artist, index) => {
+                  return (
+                    <a
+                      key={index}
+                      href={artist.id ? "profile/" + artist.id : "/"}
+                      className="mediacardAnchor"
+                    >
+                      <MediaCard
+                        title={artist.name}
+                        subtitle={artist?.location?.city || "NYC"}
+                        img={artist.profilepicture}
+                        audio={""}
+                        playing={playing}
+                        setPlaying={setPlaying}
+                        selected={selected}
+                        setSelected={setSelected}
+                        index={index}
+                      />
+                    </a>
+                  );
+                })}
+              </ScrollableContainer2>
+            ) : (
+              <div className="empty"></div>
+            )}
+          </div>
+
+          <div className="footer">
+            <div className="footer-img">
+              <img src={fimg} alt="" />
+            </div>
+            <div className="container">
+              <div className="heading">Join The Community</div>
+              <div className="bottom">
+                <div className="formContainer">
+                  {/* <div className="text">Stay in the loop...</div> */}
+                  <div className="form">
+                    <Input className="emailInput" placeholder="Email" />
+                    <Button className="button button-foot">Submit</Button>
+                  </div>
+                </div>
+                <div className="socials">
+                  <a
+                    className="twitterIcon"
+                    href="https://twitter.com/mashlabs_xyz"
+                    target="_blank"
+                  >
+                    <FaTwitter />
+                  </a>
+                  <a
+                    className="instagramIcon"
+                    href=" https://www.instagram.com/mashlabs_xyz/"
+                    target="_blank"
+                  >
+                    <FaInstagram />
+                  </a>
+                  <a
+                    className="discordIcon"
+                    href="https://discord.gg/zvrDXQWRvQ"
+                    target="_blank"
+                  >
+                    <FaDiscord />
+                  </a>
+                  <a
+                    className="emailIcon"
+                    href="mailto:info@mashlabs.xyz"
+                    target="_blank"
+                  >
+                    <FaEnvelope />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <Footer />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function Footer() {
+  return (
+    <div className="copyright-other">
+      <div className="copyright">© Mash Labs 2024</div>
+
+      <div className="links">
+        <a href="">privacy</a>
+        <a href="">terms</a>
+      </div>
+    </div>
+  );
+}
+
+function Collections({ collections }) {
+  const [selectedCollection, setSelectedCollection] = useState(0);
+  const [playing, setPlaying] = useState(false);
+  return (
+    <div className="collections">
+      {collections && (
+        <div className="container">
+          <div className="options">
+            {collections.map((collection, index) => {
+              return (
+                <div
+                  key={index}
+                  className={
+                    "option " +
+                    (index == selectedCollection ? "selectedOpt" : "")
+                  }
+                  onClick={() => {
+                    setSelectedCollection(index), setPlaying(false);
+                  }}
+                >
+                  {collection.name}
+                </div>
+              );
+            })}
+          </div>
+          <div className="view">
+            <CompactCollection
+              data={collections[selectedCollection]}
+              playing={playing}
+              setPlaying={setPlaying}
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+--- END OF FILE: src\pages\Landing.jsx ---
+
+
+
+--- START OF FILE: src\pages\Mashboard.jsx ---
+
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import "./Mashboard.scss";
+import { GoDotFill } from "react-icons/go";
+import Separator from "../components/Separator";
+import { Button } from "@mui/base";
+import { Slider } from "@mui/base/Slider";
+import ScrollableContainer from "../components/ScrollableContainer";
+import { AudioCard, EmptyCard, VisualCard } from "../components/Card";
+import { useContext, useEffect, useRef, useState } from "react";
+import { FaPause, FaPlay } from "react-icons/fa";
+import { HiSpeakerWave } from "react-icons/hi2";
+import { FaAngleLeft } from "react-icons/fa6";
+import LoaderDialog from "../components/LoaderDialog";
+import { collection1, collection2 } from "../server/data";
+import { MediaContext } from "../context/MediaContext";
+
+export default function Mashboard() {
+  const { globalAudios, setGlobalAudios, globalVideos, setGlobalVideos } =
+    useContext(MediaContext);
+  const videoRef = useRef();
+  const imageRef = useRef();
+  const audioRef = useRef();
+  const [selectedAudio, setSelectedAudio] = useState(0);
+  const [selectedVideo, setSelectedVideo] = useState(0);
+  const [collection, setCollection] = useState(null);
+  const [audios, setAudios] = useState([]);
+  const [videos, setVideos] = useState([]);
+  const [playing, setPlaying] = useState(false);
+  const [volume, setVolume] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const collectionId = searchParams.get("collection");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (collectionId == 1) {
+      fetch("/api/collections")
+        .then((res) => res.json())
+        .then((collections) => {
+          const data = collections[0];
+          console.log(data);
+          setGlobalAudios([data.audios[0], data.audios[1]]);
+          setGlobalVideos([data.videos[0]]);
+        });
+    } else if (collectionId == 2) {
+      setGlobalAudios(collection2.audios);
+      setGlobalVideos(collection2.videos);
+    } else {
+    }
+  }, []);
+
+  useEffect(() => {
+    setAudios(globalAudios);
+  }, [globalAudios]);
+  useEffect(() => {
+    setVideos(globalVideos);
+  }, [globalVideos]);
+
+  useEffect(() => {
+    if (audios && videos) {
+      if (audioRef.current)
+        audioRef.current.src = audios[selectedAudio]?.audioLink;
+      if (audios[selectedAudio]?.startAt) {
+        audioRef.current.currentTime = audios[selectedAudio]?.startAt;
+      }
+      if (imageRef.current)
+        imageRef.current.src = videos[selectedVideo]?.videoLink;
+      if (videoRef.current) {
+        videoRef.current.src = videos[selectedVideo]?.videoLink;
+      }
+      setPlaying(false);
+    }
+  }, [audios, videos]);
+
+  useEffect(() => {
+    if (audios && audioRef.current) {
+      audioRef.current.src = audios[selectedAudio]?.audioLink;
+      audioRef.current.play();
+      if (audios[selectedAudio]?.startAt) {
+        audioRef.current.currentTime = audios[selectedAudio]?.startAt;
+      }
+      setPlaying(true);
+    }
+  }, [selectedAudio]);
+
+  useEffect(() => {
+    if (videos) {
+      if (imageRef.current)
+        imageRef.current.src = videos[selectedVideo]?.videoLink;
+      if (videoRef.current) {
+        videoRef.current.src = videos[selectedVideo]?.videoLink;
+        videoRef.current.play();
+      }
+      setPlaying(true);
+    }
+  }, [selectedVideo]);
+
+  useEffect(() => {
+    if (imageRef.current)
+      imageRef.current.src = videos[selectedVideo]?.videoLink;
+  }, [videos, imageRef.current]);
+
+  useEffect(() => {
+    if (audios && videos) {
+      if (playing) {
+        audioRef.current.play();
+        if (videoRef.current) videoRef.current.play();
+      } else {
+        audioRef.current.pause();
+        if (videoRef.current) videoRef.current.pause();
+      }
+    }
+  }, [
+    playing,
+    audios,
+    videos,
+    videoRef.current,
+    imageRef.current,
+    audioRef.current,
+  ]);
+  useEffect(() => {
+    if (audios.length < 5) {
+      setAudios((prevAudios) => {
+        if (prevAudios.length >= 5) return prevAudios;
+        const emptyAudioArray = [];
+        for (let i = prevAudios.length; i < 5; i++) {
+          emptyAudioArray.push({ emptyCard: true, id: i });
+        }
+        return [...prevAudios, ...emptyAudioArray];
+      });
+    }
+  }, [audios.length]);
+  
+  useEffect(() => {
+    if (videos.length < 5) {
+      setVideos((prevVideos) => {
+        if (prevVideos.length >= 5) return prevVideos;
+        const emptyVideoArray = [];
+        for (let i = prevVideos.length; i < 5; i++) {
+          emptyVideoArray.push({ emptyCard: true, id: i });
+        }
+        return [...prevVideos, ...emptyVideoArray];
+      });
+    }
+  }, [videos.length]);
+
+  useEffect(() => {
+    if (audios) audioRef.current.volume = volume;
+  }, [volume]);
+
+  function togglePlayPause() {
+    setPlaying((prevPlaying) => {
+      const playing = !prevPlaying;
+      return playing;
+    });
+  }
+  function mash() {
+    const searchParams = new URLSearchParams({
+      collection: id,
+      selectedAudio: audios[selectedAudio].id,
+      selectedVideo: videos[selectedVideo].id,
+    });
+    setLoading(true);
+    setTimeout(() => {
+      navigate(`/premint?${searchParams.toString()}`);
+    }, 2000);
+  }
+  return (
+    <div className="mashboardPage">
+      <LoaderDialog
+        message={"Please wait, your request is Processing"}
+        open={loading}
+      />
+      {
+        <div className="pageContent">
+          <div className="top">
+            <a href="/">
+              <FaAngleLeft size={12} /> Back to collections
+            </a>
+          </div>
+          <div className="mashboardMain">
+            <div className="preview">
+              <div className="text">PREVIEW</div>
+              <MashedPreview
+                type={videos[selectedVideo]?.type}
+                imageRef={imageRef}
+                togglePlayPause={togglePlayPause}
+                videoRef={videoRef}
+                audioRef={audioRef}
+                playing={playing}
+                volume={volume}
+                setVolume={setVolume}
+              />
+              <div className="mashButton">
+                <Button
+                  className={`button fullbutton ${
+                    (globalVideos.length <= 0 ||
+                    globalAudios.length <= 0 )&&
+                    "disabled"
+                  }`}
+                  disabled={
+                    globalVideos.length <= 0 || globalAudios.length <= 0
+                  }
+                  onClick={() => {
+                    navigate(
+                      `/premint?audio=${globalAudios[selectedAudio].id}&video=${globalVideos[selectedVideo].id}`
+                    );
+                  }}
+                >
+                  MASH
+                </Button>
+              </div>
+
+              {collection && (
+                <div className="info">
+                  <div className="heading">Collection Details</div>
+                  <div className="textContainer">
+                    <div className="title">Aerial Collection</div>
+                    <div
+                      className="subtext copyable"
+                      onClick={() => {
+                        navigator.clipboard.writeText("jlajsldfjlajsdlfj");
+                      }}
+                    >
+                      csl.. kcl
+                    </div>
+                  </div>
+                  <div className="textContainer">
+                    <div className="title">Royalties</div>
+                    <div className="subtext">{1.2}%</div>
+                  </div>
+                  <div className="textContainer">
+                    <div className="title">Mints Available</div>
+                    <div className="subtext">
+                      {4}/{32}
+                    </div>
+                  </div>
+                  {/* <div className="textContainer">
+                  <div className="title">Mints Supplied</div>
+                  <div className="subtext">{collection.suppliedMints} </div>
+                </div> */}
+                </div>
+              )}
+            </div>
+
+            <div className="content">
+              <ScrollableContainer>
+                {videos?.map((video, index) => {
+                  return video.emptyCard ? (
+                    <EmptyCard type="video" key={video.id} />
+                  ) : (
+                    <VisualCard
+                      key={index}
+                      video={video}
+                      isSelected={selectedVideo == index}
+                      setSelected={() => setSelectedVideo(index)}
+                    />
+                  );
+                })}
+              </ScrollableContainer>
+              <Separator />
+              <ScrollableContainer>
+                {audios?.map((audio, index) => {
+                  return audio.emptyCard ? (
+                    <EmptyCard type="audio" key={audio.id} />
+                  ) : (
+                    <AudioCard
+                      key={index}
+                      audio={audio}
+                      isSelected={selectedAudio == index}
+                      setSelected={() => setSelectedAudio(index)}
+                    />
+                  );
+                })}
+              </ScrollableContainer>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  );
+}
+
+export function MashedPreview({
+  type,
+  imageRef,
+  togglePlayPause,
+  videoRef,
+  audioRef,
+  playing,
+  volume,
+  setVolume,
+}) {
+  return (
+    <div className="mashedPreview">
+      <div className="controls">
+        <div
+          className={`clickable ${!playing ? "darken" : ""}`}
+          onClick={() => togglePlayPause()}
+        >
+          <div className="playpause">{playing ? "" : <FaPlay />}</div>
+        </div>
+      </div>
+      <div className="video">
+        {type && type == "gif" ? (
+          <img ref={imageRef} className="mashImage"></img>
+        ) : (
+          <video
+            ref={videoRef}
+            className="mashVideo"
+            muted
+            loop
+            autoPlay
+            playsInline
+          ></video>
+        )}
+      </div>
+      <audio ref={audioRef} className="mashAudio" autoPlay loop hidden></audio>
+    </div>
+  );
+}
+
+
+--- END OF FILE: src\pages\Mashboard.jsx ---
+
+
+
+--- START OF FILE: src\pages\Premint.jsx ---
+
+import { FaAngleLeft } from "react-icons/fa6";
+import "./Premint.scss";
+import { MashedPreview } from "./Mashboard";
+import { useEffect, useRef, useState } from "react";
+import { Button } from "@mui/base";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import LoaderDialog from "../components/LoaderDialog";
+import { collection1, collection2 } from "../server/data";
+
+function getRoyalty(price, royalty) {
+  const result = (price * royalty) / 100;
+  return parseFloat(result.toFixed(4));
+}
+
+export default function Premint() {
+  const videoRef = useRef();
+  const audioRef = useRef();
+  const imageRef = useRef();
+  const [playing, setPlaying] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState({});
+  const [selectedAudio, setSelectedAudio] = useState({});
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const selectedVideoId = searchParams.get("video");  
+  const selectedAudioId = searchParams.get("audio");
+
+  const id = 0;
+
+  useEffect(() => {
+    if (selectedVideoId && selectedAudioId) {
+      fetch("/api/audios/" + selectedAudioId)
+        .then((res) => res.json())
+        .then((data) => setSelectedAudio(data));
+      fetch("/api/videos/" + selectedVideoId)
+        .then((res) => res.json())
+        .then((data) => setSelectedVideo(data));
+    } else {
+      // navigate("/");
+    }
+  }, []);
+  
+
+  useEffect(() => {
+    if (selectedVideo && selectedAudio) {
+      if (imageRef.current) imageRef.current.src = selectedVideo.videoLink;
+      if (videoRef.current) {
+        videoRef.current.src = selectedVideo.videoLink;
+        videoRef.current.pause(); // Ensure the video is paused
+      }
+
+      if (audioRef.current) {
+        audioRef.current.src = selectedAudio.audioLink;
+        audioRef.current.pause(); // Ensure the audio is paused
+      }
+    }
+    setPlaying(false);
+  }, [selectedVideo, selectedAudio]);
+
+  useEffect(() => {
+    if (playing) {
+      if (videoRef.current) videoRef.current.play();
+      if (audioRef.current) audioRef.current.play();
+    } else {
+      if (videoRef.current) videoRef.current.pause();
+      if (audioRef.current) audioRef.current.pause();
+    }
+  }, [playing]);
+
+  function togglePlayPause() {
+    setPlaying((prevPlaying) => {
+      const playing = !prevPlaying;
+      return playing;
+    });
+  }
+
+  function getFirstWord(str) {
+    if (str) {
+      const words = str.trim().split(/\s+/);
+      return words[0] || "";
+    }
+  }
+  function goBack() {
+    navigate(`/mashboard`);
+  }
+
+  function mint() {
+    const searchParams = new URLSearchParams({
+      selectedAudio: selectedAudioId,
+      selectedVideo: selectedVideoId,
+    });
+    setLoading(true);
+    setTimeout(() => {
+      navigate(`/mint?${searchParams.toString()}`);
+    }, 2000);
+  }
+
+  return (
+    <div className="premint">
+      <LoaderDialog
+        message={"Please wait, your request is Processing"}
+        open={loading}
+      />
+      <div className="previewContainer">
+        <div className="top">
+          <a onClick={() => goBack()}>
+            <FaAngleLeft size={20} />
+            Back to editing
+          </a>
+        </div>
+        <div className="content">
+          <div className="topInfo">
+            {/* <div className="mashedTitle">
+              {collection?.videos[selectedVideo]?.title}{" "}
+              <div className="x">x</div>
+              {collection?.audios[selectedAudio]?.title}
+            </div>
+            <div className="userName">
+              Masher: <span className="highlighted">Chrome King</span>
+            </div> */}
+          </div>
+          <div className="preview">
+            <MashedPreview
+              togglePlayPause={() => togglePlayPause()}
+              imageRef={imageRef}
+              type={selectedVideo.type}
+              videoRef={videoRef}
+              audioRef={audioRef}
+              playing={playing}
+            />
+            <div className="otherInfo">
+              <div className="mint">
+                <Button className="mintbutton-mint" onClick={() => mint()}>
+                  MINT
+                </Button>
+              </div>
+              <div className="info">
+                <div className="mashedTitle">
+                  {selectedVideo?.title} <div className="x">x</div>
+                  {selectedAudio?.title}
+                </div>
+                <div className="infoCard">
+                  <div className="cardTitle">Current Price</div>
+                  <div className="price">
+                    {selectedVideo?.price + selectedAudio?.price} ETH
+                  </div>
+                  <div className="fees">
+                    +{getRoyalty(selectedVideo?.price + selectedAudio?.price)}{" "}
+                    ETH Mash fees
+                  </div>
+                </div>
+                <div className="infoCard">
+                  <div className="cardTitle">Owner Address</div>
+                  <div className="address">dAckZ...Lxhs</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="details">
+        <ArtistCard
+          type="visualArtist"
+          avatar={selectedVideo?.thumbnail}
+          title={selectedVideo?.title}
+          artistName={selectedVideo?.artist}
+          collectionName={selectedVideo?.title}
+          price={selectedVideo?.price}
+          royalty={selectedVideo?.royalties}
+          charity={selectedVideo?.visualArtistCharity}
+        />
+        <ArtistCard
+          type="musician"
+          avatar={selectedAudio.art}
+          title={selectedAudio?.title}
+          artistName={selectedAudio.artist}
+          collectionName={selectedAudio.title}
+          price={selectedAudio?.price}
+          royalty={selectedAudio.royalties}
+          charity={selectedAudio.musicianCharity}
+        />
+      </div>
+    </div>
+  );
+}
+
+function ArtistCard({
+  type,
+  avatar,
+  artistName,
+  collectionName,
+  title,
+  price,
+  royalty,
+  charity,
+}) {
+  return (
+    <div className="artistCard">
+      <img src={avatar} alt="" />
+      <div className="info">
+        <div className="name">{title}</div>
+        <div className="moreInfo">
+          <div className="column">
+            <div className="left">Title</div>
+            <div className="columnRight">{title}</div>
+          </div>
+          <div className="column">
+            <div className="left">
+              {type == "musician" ? "Music Artist" : "Visual Artist"}
+            </div>
+            <div className="columnRight">{artistName}</div>
+          </div>
+          <div className="column">
+            <div className="left">Collection</div>
+            <div className="columnRight">{collectionName}</div>
+          </div>
+          <div className="column">
+            <div className="left">List Price</div>
+            <div className="columnRight">{price}</div>
+          </div>
+          <div className="column">
+            <div className="left">Royalty Fee({royalty}%)</div>
+            <div className="columnRight">{getRoyalty(price, royalty)} ETH</div>
+          </div>
+          <div className="column">
+            <div className="left">Owner Address</div>
+            <div className="columnRight">muMZ...sGsao</div>
+          </div>
+          <div className="column">
+            <div className="left">Non-Profit Organization Supported</div>
+            <div className="columnRight">{charity}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+--- END OF FILE: src\pages\Premint.jsx ---
+
+
+
+--- START OF FILE: src\pages\Profile.jsx ---
+
+import { useEffect, useRef, useState } from "react";
+import ScrollableContainer from "../components/ScrollableContainer";
+import "./Profile.scss";
+import { MdOutlineArrowOutward } from "react-icons/md";
+import { FaStar } from "react-icons/fa";
+import { FaPlus, FaRegStar } from "react-icons/fa6";
+import { CiSearch } from "react-icons/ci";
+import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
+import { useParams } from "react-router-dom";
+import { LuLoader, LuLoader2 } from "react-icons/lu";
+import { Footer } from "./Landing";
+import { AiOutlinePlus } from "react-icons/ai";
+import { FullArt } from "../components/FullArt";
+
+export default function Profile() {
+  // const newReleases = [
+  //   {
+  //     url: "https://c.saavncdn.com/372/Starboy-English-2016-500x500.jpg",
+  //     title: "Lorem Ipsum",
+  //     subtitle: "Lorem Ipsum",
+  //   },
+  //   {
+  //     url: "https://upload.wikimedia.org/wikipedia/en/9/98/Havana_%28featuring_Young_Thug%29_%28Official_Single_Cover%29_by_Camila_Cabello.png",
+  //     title: "Lorem Ipsum",
+  //     subtitle: "Lorem Ipsum",
+  //   },
+  //   {
+  //     url: "https://i.scdn.co/image/ab67616d00001e02dbecd3d4b91dc8528e7860dd",
+  //     title: "Lorem Ipsum",
+  //     subtitle: "Lorem Ipsum",
+  //   },
+  //   {
+  //     url: "https://i.scdn.co/image/ab67616d00001e026692894a21e77afd00eb137d",
+  //     title: "Lorem Ipsum",
+  //     subtitle: "Lorem Ipsum",
+  //   },
+  //   {
+  //     url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMKFO1Q4gPnGt2HpEm0VvJf58Scy-ri1NzSg&s",
+  //     title: "Lorem Ipsum",
+  //     subtitle: "Lorem Ipsum",
+  //   },
+  //   {
+  //     url: "https://upload.wikimedia.org/wikipedia/en/5/5b/Mine_Bazzi_Single.png",
+  //     title: "Lorem Ipsum",
+  //     subtitle: "Lorem Ipsum",
+  //   },
+  //   {
+  //     url: "https://i.pinimg.com/originals/53/7c/ea/537cea2bf762e4530baa1777a12fe70f.jpg",
+  //     title: "Lorem Ipsum",
+  //     subtitle: "Lorem Ipsum",
+  //   },
+  //   {
+  //     url: "https://i1.sndcdn.com/artworks-YXEFmZyCA68j80hU-SBcP9g-t500x500.jpg",
+  //     title: "Lorem Ipsum",
+  //     subtitle: "Lorem Ipsum",
+  //   },
+  //   {
+  //     url: "https://i.scdn.co/image/ab67616d0000b27328581cfe196c266c132a9d62",
+  //     title: "Lorem Ipsum",
+  //     subtitle: "Lorem Ipsum",
+  //   },
+  //   {
+  //     url: "https://upload.wikimedia.org/wikipedia/en/e/e6/The_Weeknd_-_Blinding_Lights.png",
+  //     title: "Lorem Ipsum",
+  //     subtitle: "Lorem Ipsum",
+  //   },
+  //   {
+  //     url: "https://i1.sndcdn.com/artworks-000477184389-dg006a-t500x500.jpg",
+  //     title: "Lorem Ipsum",
+  //     subtitle: "Lorem Ipsum",
+  //   },
+  //   {
+  //     url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRML3eYpPloaX8r-AjSR9nKsniBPE74IN4r2A&s",
+  //     title: "Lorem Ipsum",
+  //     subtitle: "Lorem Ipsum",
+  //   },
+  //   {
+  //     url: "https://i.scdn.co/image/ab67616d0000b2737226776068d972523dd4e7f8",
+  //     title: "Lorem Ipsum",
+  //     subtitle: "Lorem Ipsum",
+  //   },
+  // ];
+  const sections = [
+    {
+      name: "New Releases",
+      id: "newreleases",
+    },
+    {
+      name: "Collections",
+      id: "collections",
+    },
+    {
+      name: "Solo Work",
+      id: "solowork",
+    },
+  ];
+  const [selectedOption, setSelectedOption] = useState("newreleases");
+  const [artistDetails, setArtistDetails] = useState();
+  const [newReleases, setNewReleases] = useState([]);
+  const [featured, setFeatured] = useState([]);
+  const [playing, setPlaying] = useState(false);
+  const [selected, setSelected] = useState(null);
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    fetch("https://mash-server.onrender.com/artists/" + id)
+      .then((data) => data.json())
+      .then((data) => {
+        console.log(data);
+        setArtistDetails(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    fetch("https://mash-server.onrender.com/artists/" + id + "/solo-works")
+      .then((data) => data.json())
+      .then((data) => {
+        console.log(data);
+        setNewReleases(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    fetch("https://mash-server.onrender.com/artists/" + id + "/solo-works")
+      .then((data) => data.json())
+      .then((data) => {
+        console.log(data);
+        setFeatured(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+  return artistDetails ? (
+    <>
+      <div className="profile">
+        <div className="overview">
+          <div className="banner">
+            <img
+              src={
+                artistDetails.bannerpicture ||
+                "https://images.pexels.com/photos/2747446/pexels-photo-2747446.jpeg?cs=srgb&dl=pexels-wolfgang-1002140-2747446.jpg&fm=jpg"
+              }
+              alt=""
+            />
+          </div>
+          <div className="profileDetails">
+            <div className="detailsMain">
+              <img
+                src={artistDetails.profilepicture}
+                alt=""
+                className="profileImg"
+              />
+              <div className="identifier">@{artistDetails.name}</div>
+              <div className="socials">
+                <div className="social">
+                  Instagram{" "}
+                  <MdOutlineArrowOutward size={13} className="arrow" />
+                </div>
+                <div className="social">
+                  Tiktok <MdOutlineArrowOutward size={13} className="arrow" />
+                </div>
+                <div className="social">
+                  Twitter <MdOutlineArrowOutward size={13} className="arrow" />
+                </div>
+                <div className="social">
+                  Website <MdOutlineArrowOutward size={13} className="arrow" />
+                </div>
+              </div>
+              <div className="profileButtons">
+                <button className="button contact">Contact</button>
+                <button className="button">Follow</button>
+              </div>
+            </div>
+            <div className="profileDescription">
+              <div className="name">{artistDetails?.name}</div>
+              <div className="descContent">{artistDetails.description}</div>
+            </div>
+          </div>
+        </div>
+        <div className="searchcontainer">
+          <div className="icon">
+            <CiSearch />
+          </div>
+          <input
+            type="text"
+            name="search"
+            id=""
+            placeholder="Search Songs, Albums, Tags..."
+            className="searchBox"
+          />
+        </div>
+        <div className="section">
+          <div className="sectionSubtitle">Artist</div>
+          <div className="sectionTitle">Featured Content</div>
+          <div className="separator"></div>
+          <ScrollableContainer>
+            {featured.length > 6 &&
+              [
+                featured[0],
+                featured[1],
+                featured[2],
+                featured[3],
+                featured[5],
+              ]?.map((media, index) => {
+                return (
+                  <CollectionCard
+                    key={index}
+                    img={media.image_url}
+                    title={media.file_name}
+                    subtitle={media.creator}
+                    scarcity={media.scarcity}
+                  />
+                );
+              })}
+          </ScrollableContainer>
+        </div>
+        <div className="section mediaSection">
+          <div className="options">
+            {sections.map((section, index) => {
+              return (
+                <div
+                  key={index}
+                  className={`option ${
+                    selectedOption == section.id ? "selectedOption" : ""
+                  }`}
+                  onClick={() => setSelectedOption(section.id)}
+                >
+                  {section.name}
+                </div>
+              );
+            })}
+          </div>
+          <div className="separator"></div>
+          {selectedOption == "newreleases" ? (
+            <ScrollableContainer>
+              {newReleases?.slice(0, 8).map((audio, index) => {
+                return (
+                  <MediaCard
+                    key={index}
+                    title={audio.file_name}
+                    subtitle={audio.scarcity}
+                    img={audio.image_url}
+                    audio={audio.song_url}
+                    playing={playing}
+                    setPlaying={setPlaying}
+                    selected={selected}
+                    setSelected={setSelected}
+                    index={index}
+                    fullVisibility={true}
+                  />
+                );
+              })}
+            </ScrollableContainer>
+          ) : selectedOption == "collections" ? (
+            <div className="collectionsPlaceholder">No Collections...</div>
+          ) : selectedOption == "solowork" ? (
+            <ScrollableContainer>
+              {newReleases?.map((audio, index) => {
+                return (
+                  <MediaCard
+                    key={index}
+                    title={audio.file_name}
+                    subtitle={audio.scarcity}
+                    img={audio.image_url}
+                    audio={audio.song_url}
+                    playing={playing}
+                    setPlaying={setPlaying}
+                    selected={selected}
+                    setSelected={setSelected}
+                    index={index}
+                    fullVisibility={true}
+                  />
+                );
+              })}
+            </ScrollableContainer>
+          ) : (
+            <div className=""></div>
+          )}
+        </div>
+      </div>
+      <Footer />
+    </>
+  ) : (
+    <div className="loading">
+      <LuLoader2 className="loaderFull spin" />
+    </div>
+  );
+}
+
+export function CollectionCard({ img, title, subtitle, scarcity }) {
+  const [fullArtVisible, setFullArtVisible] = useState(false);
+  return (
+    <div className="collectionCard">
+      <FullArt
+        src={img}
+        type={"image"}
+        visible={fullArtVisible}
+        setVisible={setFullArtVisible}
+      />
+      {/* <div className="starcontainer">
+        <FaStar /> */}
+      {/* <FaRegStar /> */}
+      {/* </div> */}
+      <img
+        src={img}
+        alt=""
+        className="cardImg"
+        onClick={() => setFullArtVisible(true)}
+      />
+      <div className="title">{title}</div>
+      <div className="subtitle">{subtitle}</div>
+      <div className="scarcity">{scarcity}</div>
+    </div>
+  );
+}
+
+// function MediaCard({ img, title, subtitle }) {
+//   return (
+//     <div className="mediaCard">
+//       <img src={img} alt="" className="cardImg" />
+//       <div className="title">{title}</div>
+//       <div className="subtitle">{subtitle}</div>
+//     </div>
+//   );
+// }
+
+
+export function MediaCard({
+  title,
+  subtitle,
+  img,
+  video,
+  audio,
+  index,
+  playing,
+  setPlaying,
+  selected,
+  setSelected,
+  addMedia,
+  fullVisibility,
+}) {
+  const audioRef = useRef(null);
+  const [fullArtVisible, setFullArtVisible] = useState(false);
+
+  const handleImageClick = () => {
+    console.log(fullVisibility);
+    if (fullVisibility && !audio) {
+      setFullArtVisible(true);
+      return;
+    }
+    if (addMedia) {
+      addMedia();
+      return;
+    }
+    try {
+      if (playing && index == selected) {
+        setPlaying(false);
+      } else {
+        setPlaying(true);
+        setSelected(index);
+      }
+    } catch (error) {}
+  };
+  useEffect(() => {
+    const audioElement = audioRef.current;
+    if (!audioElement) {
+      return;
+    }
+    if (playing && selected == index) {
+      audioElement.currentTime = 0;
+      audioElement.play();
+    } else if ((playing && selected != index) || !playing) {
+      if (!audioElement.paused) {
+        audioElement.pause();
+      }
+    }
+  }, [playing, selected]);
+
+  return (
+    <div className="mediaCard">
+      <FullArt
+        src={video ? video : img}
+        type={video ? "video" : "image"}
+        visible={fullArtVisible}
+        setVisible={setFullArtVisible}
+      />
+      <div className="artistImage">
+        {video ? (
+          <video
+            src={video}
+            className="artistAvatar"
+            autoPlay
+            muted
+            loop
+            onClick={handleImageClick}
+          ></video>
+        ) : (
+          <img
+            src={img}
+            alt=""
+            className="artistAvatar"
+            onClick={handleImageClick}
+          />
+        )}
+        {!video && audio && (
+          <div className="speakerIcon">
+            {playing && selected == index ? (
+              <HiSpeakerWave size={14} />
+            ) : (
+              <HiSpeakerXMark size={14} />
+            )}
+          </div>
+        )}
+        {addMedia && (
+          <div className="addIcon" onClick={() => addMedia()}>
+            <FaPlus />
+          </div>
+        )}
+      </div>
+      <div className="">
+        <div className="title">{title}</div>
+        <div className="subtitle">{subtitle}</div>
+      </div>
+      <div className="hidden">
+        <audio
+          ref={audioRef}
+          src={audio ? audio : ""}
+          className="audioElement"
+        ></audio>
+      </div>
+    </div>
+  );
+}
+
+
+--- END OF FILE: src\pages\Profile.jsx ---
+
+
+
+--- START OF FILE: src\pages\VisualLibrary.jsx ---
+
+import React, { useContext, useEffect, useState } from "react";
+import "./Library.scss";
+import { MediaCard } from "./Profile";
+import { MediaContext } from "../context/MediaContext";
+export default function VisualLibrary() {
+  const { globalAudios, setGlobalAudios, globalVideos, setGlobalVideos } =
+    useContext(MediaContext);
+  const sections = [
+    {
+      name: "Trending Today",
+      id: "Trending Today",
+    },
+    {
+      name: "Most Popular",
+      id: "Most Popular",
+    },
+    {
+      name: "Artists",
+      id: "Artists",
+    },
+    {
+      name: "Art Style",
+      id: "Art Style",
+    },
+  ];
+  const [selectedOption, setSelectedOption] = useState("Trending Today");
+  const [videos, setVideos] = useState([]);
+
+  useEffect(() => {
+    fetch("/api/videos")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setVideos(data);
+      });
+  }, []);
+
+  function addVideo(video) {
+    console.log("adding video");
+    setGlobalVideos((oldvideos) => {
+      const isAlreadyAdded = oldvideos.some(
+        (existingVideo) => existingVideo.id === video.id
+      );
+      console.log(isAlreadyAdded);
+      if (!isAlreadyAdded) {
+        return [...oldvideos, video];
+      }
+      return oldvideos;
+    });
+  }
+  
+  
+  return (
+    <div className="library">
+      <div className="library-title">Explore Visuals</div>
+      <div className="options">
+        {sections.map((section, index) => {
+          return (
+            <div
+              key={index}
+              className={`option ${
+                selectedOption == section.id ? "selectedOption" : ""
+              }`}
+              onClick={() => setSelectedOption(section.id)}
+            >
+              {section.name}
+            </div>
+          );
+        })}
+      </div>
+      <div className="separator"></div>
+      <div className="content">
+        <div className="container">
+          {videos.map((video) => {
+            return (
+              <MediaCard
+                img={video.thumbnail}
+                title={video.title}
+                subtitle={video.artist}
+                addMedia={() => addVideo(video)}
+              />
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+--- END OF FILE: src\pages\VisualLibrary.jsx ---
+
+
+
+--- START OF FILE: src\server\server.js ---
+
+import { createServer } from "miragejs";
+
+export function makeServer() {
+  createServer({
+    routes() {
+      this.namespace = "api";
+
+      // Endpoint for /api/videos
+      this.get("/videos", (schema) => {
+        return schema.db.videos;
+      });
+
+      // Endpoint for /api/videos/:id
+      this.get("/videos/:id", (schema, request) => {
+        let id = request.params.id;
+        return schema.db.videos.find(id);
+      });
+
+      // Endpoint for /api/audios
+      this.get("/audios", (schema) => {
+        return schema.db.audios;
+      });
+
+      // Endpoint for /api/audios/:id
+      this.get("/audios/:id", (schema, request) => {
+        let id = request.params.id;
+        return schema.db.audios.find(id);
+      });
+
+      // Endpoint for /api/collections
+      this.get("/collections", (schema) => {
+        // Add IDs to the videos within collections
+        return schema.db.collections.map((collection) => {
+          const videosWithIds = collection.videos.map((video) => ({
+            ...video,
+            id: video.id || `${collection.name}-${video.title}`, // Ensure IDs are set
+          }));
+
+          return {
+            ...collection,
+            videos: videosWithIds,
+          };
+        });
+      });
+
+      // Pass through all other requests
+      this.passthrough("https://mash-server.onrender.com/**");
+      this.passthrough("https://www.googleapis.com/**");
+      this.passthrough("https://apis.google.com/**");
+      this.passthrough("**");
+    },
+
+    
+    seeds(server) {
+      const collection1 = {
+        name: "Those Were The Days",
+        musician: "Fre$hah",
+        musicianCharity: "FFTP",
+        musicianAvatar: "/images/musician2.jpg", // No replacement link provided
+        visualArtist: "Charlie Frey",
+        visualArtistCharity: "Art Start",
+        visualArtistAvatar:
+          "https://images.unsplash.com/photo-1495121553079-4c61bcce1894?q=80&w=1581&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // No replacement link provided
+        aerialCollection: "0xa6794dec66df7d8b69752956df1b28ca93f77cd7",
+        royalties: 10,
+        availableMints: 11,
+        totalMints: 70,
+        suppliedMints: 20,
+        videos: [
+          {
+            videoLink: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection1/vacationcity.mp4",
+            thumbnail: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection1/vacationcity.png",
+            title: "Vacation City",
+            artist: "Charley Frey",
+            duration: 30,
+            price: 1,
+          },
+          {
+            videoLink: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection1/brooklyn.mp4",
+            thumbnail: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection1/brooklyn.png",
+            title: "Brooklyn",
+            artist: "Charley Frey",
+            duration: 30,
+            price: 1,
+          },
+          {
+            videoLink: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection1/theoldcity.mp4",
+            thumbnail: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection1/theoldcity.png",
+            title: "The Old City",
+            artist: "Charley Frey",
+            duration: 30,
+            price: 1,
+          },
+          {
+            videoLink: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection1/theoldcity2.mp4",
+            thumbnail: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection1/theoldcity2.png",
+            title: "The Old NYC",
+            artist: "Charley Frey",
+            duration: 30,
+            price: 1,
+          },
+          {
+            videoLink: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection1/brooklyn2.mp4",
+            thumbnail: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection1/brooklyn2.png",
+            title: "Brooklyn in 80s",
+            artist: "Charley Frey",
+            duration: 30,
+            price: 1,
+          },
+        ],
+        audios: [
+          {
+            audioLink: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection1/wine.mp3",
+            title: "Wine",
+            art: "https://i.scdn.co/image/ab67616d00001e02162f1ee771e7992b4155882f",
+            artist: "Fre$ah",
+            duration: 91,
+            price: 1,
+          },
+          {
+            audioLink: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection1/checkdamethod.mp3",
+            title: "Check Da Method",
+            art: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOJL9FUFrKqyb_VHHHWtCi2qhRiQDZrNking&s",
+            artist: "Fre$ah",
+            duration: 91,
+            price: 1,
+          },
+          {
+            audioLink: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection1/figaro.mp3",
+            title: "Figaro",
+            art: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_Gp6UheHtLVW18neYPqCkAEdAHnN9gHnUkg&s",
+            artist: "Fre$ah",
+            duration: 91,
+            price: 1,
+          },
+          {
+            audioLink: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection1/fantastic.mp3",
+            title: "Fantastic",
+            art: "https://i.scdn.co/image/ab67616d00001e026788e61537b60d1c326d1662",
+            artist: "Fre$ah",
+            duration: 91,
+            price: 1,
+          },
+          {
+            audioLink: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection1/blackcoffee.mp3",
+            title: "Black Coffee",
+            art: "https://i.scdn.co/image/ab67616d00001e02966c2cc962a2d8970f8caa84",
+            artist: "Fre$ah",
+            duration: 91,
+            price: 1,
+          },
+          {
+            audioLink: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection1/cousins.mp3",
+            title: "Cousins",
+            art: "https://i.scdn.co/image/ab67616d00001e02be7d2a1e3874334581d6fcf4",
+            artist: "Fre$ah",
+            duration: 91,
+            price: 1,
+          },
+          {
+            audioLink: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection1/tightroots.mp3",
+            title: "Tight Roots",
+            art: "https://i.scdn.co/image/ab67616d00001e028a82421a9a8ea0b7ef7d584f",
+            artist: "Fre$ah",
+            duration: 91,
+            price: 1,
+          },
+          {
+            audioLink: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection1/clanof.mp3",
+            title: "Clan Of...",
+            art: "https://i.scdn.co/image/ab67616d00001e026788e61537b60d1c326d1662",
+            artist: "Fre$ah",
+            duration: 91,
+            price: 1,
+          },
+        ],
+      };
+      
+      const collection2 = {
+        name: "Player Orc",
+        musician: "Amarthi",
+        musicianCharity: "The Borgen Project",
+        musicianAvatar: "/images/musician3.png", // No replacement link provided
+        visualArtist: "Tej",
+        visualArtistCharity: "SERUDS",
+        visualArtistAvatar: "/images/artist3.png", // No replacement link provided
+        aerialCollection: "0xa6794dec66df7d8b69752956df1b28ca93f77cd7",
+        royalties: 12,
+        availableMints: 31,
+        totalMints: 444,
+        suppliedMints: 20,
+        videos: [
+          {
+            videoLink: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection2/battletime.webp",
+            type: "gif",
+            thumbnail: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection2/battletime.png",
+            title: "Battle time",
+            artist: "Magic Specs",
+            duration: 5,
+            price: 0.05,
+          },
+          {
+            videoLink: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection2/battlecry.webp",
+            type: "gif",
+            thumbnail: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection2/battlecry.png",
+            title: "Battle cry",
+            artist: "Magic Specs",
+            duration: 5,
+            price: 0.05,
+          },
+          {
+            videoLink: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection2/barehands.gif",
+            type: "gif",
+            thumbnail: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection2/barehands.png",
+            title: "Bare hands",
+            artist: "Magic Specs",
+            duration: 5,
+            price: 0.05,
+          },
+          {
+            videoLink:
+              "https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExOXY0dHI2NHNremk4dWVjMnV3aWJyaWozeWxvaXd4bTdoeHhoZHFzYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/kHOk0z9MCkMzKjDPRY/giphy.webp",
+            type: "gif",
+            thumbnail: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection2/elderwarrior.png",
+            title: "Elder warrior",
+            artist: "Magic Specs",
+            duration: 5,
+            price: 0.05,
+          },
+        ],
+        audios: [
+          {
+            audioLink: "/audio/audio3.mp3", // No replacement link provided
+            art: "https://i.scdn.co/image/ab67616d00001e026d6ff77fa88bc76062f6c02e",
+            title: "For the Glory",
+            artist: "Stone Hammer",
+            duration: 97,
+            price: 0.05,
+          },
+          {
+            audioLink: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection2/blackdiamonds.mp3",
+            art: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWxKGZJYp4KBuFt9juvdiyDvs-Hiwt6yp9kA&s",
+            title: "Black Diamonds",
+            artist: "Amartha",
+            duration: 341,
+            price: 0.05,
+          },
+          {
+            audioLink: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection2/electric.mp3",
+            art: "https://upload.wikimedia.org/wikipedia/en/1/1a/Electricwizardalbum.jpg",
+            title: "Electric Wizard",
+            artist: "Stone Hammer",
+            duration: 558,
+            startAt: 40,
+            price: 0.05,
+          },
+          {
+            audioLink: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection2/earthen.mp3",
+            art: "https://i.scdn.co/image/ab67616d0000b273daad24158e5ad65dc65b585d",
+            title: "Earthen Dweller",
+            artist: "Amartha",
+            duration: 176,
+            startAt: 100,
+            price: 0.05,
+          },
+          {
+            audioLink: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection2/elrodeo.mp3",
+            art: "https://images.genius.com/037b15a4b347e5c6ab9766795e394f3b.640x640x1.jpg",
+            title: "El Rodeo",
+            artist: "Stone Hammer",
+            startAt: 100,
+            duration: 329,
+            price: 0.05,
+          },
+          {
+            audioLink: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection2/dusk.mp3",
+            art: "https://i.scdn.co/image/ab67616d0000b2732bdcb339402ebd78651f09c8",
+            title: "Dusk",
+            artist: "Amartha",
+            startAt: 70,
+            duration: 125,
+            price: 0.05,
+          },
+          {
+            audioLink: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection2/youngblood.mp3",
+            art: "https://i1.sndcdn.com/artworks-000427217799-6749ua-t500x500.jpg",
+            title: "Youngblood",
+            artist: "Stone Hammer",
+            duration: 452,
+            startAt: 40,
+            price: 0.05,
+          },
+          {
+            audioLink: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection2/brewing.mp3",
+            art: "https://i.scdn.co/image/ab67616d00001e02ae1c5d9aee0f14adf28feeed",
+            title: "Brewing The Storm",
+            artist: "Amartha",
+            duration: 116,
+            startAt: 40,
+            price: 0.05,
+          },
+          {
+            audioLink: "https://mashlabsbucket.s3.us-east-1.amazonaws.com/collection2/thedays.mp3",
+            art: "https://i.scdn.co/image/ab67616d0000b273e7d15da7d7af8391a8f32f41",
+            title: "The Days We Loved",
+            artist: "Magic Specs",
+            duration: 241,
+            startAt: 15,
+            price: 0.05,
+          },
+        ],
+      };
+      
+      
+
+      const collections = [collection1, collection2];
+
+      // Initialize counters for unique IDs
+      let videoId = 1;
+      let audioId = 1;
+
+      // Process collections to assign IDs and flatten videos and audios
+      const videos = [];
+      const audios = [];
+
+      collections.forEach((collection) => {
+        collection.videos.forEach((video) => {
+          video.id = videoId++;
+          video.collectionName = collection.name;
+          videos.push(video);
+        });
+        collection.audios.forEach((audio) => {
+          audio.id = audioId++;
+          audio.collectionName = collection.name;
+          audios.push(audio);
+        });
+      });
+
+      // Load data into Mirage's database
+      server.db.loadData({
+        collections,
+        videos,
+        audios,
+      });
+    },
+  });
+}
+
+
+--- END OF FILE: src\server\server.js ---
+

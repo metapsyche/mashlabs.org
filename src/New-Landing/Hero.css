@@ -1,0 +1,428 @@
+.hero-container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: black;
+    overflow: visible;
+}
+
+.hero-container::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+
+    background: radial-gradient(386.31% 96.87% at 96.08% 59.01%,
+            rgba(20, 23, 50, 0.40) 0%,
+            rgba(0, 0, 1, 0.40) 100%);
+}
+
+.hero-container::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 240px;
+    /* adjust fade strength */
+    pointer-events: none;
+    z-index: 5;
+
+    background: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0) 0%,
+            rgba(0, 0, 0, 0.6) 60%,
+            #000 100%);
+}
+
+
+@media (max-width: 1024px) {
+    .hero-container {
+        height: auto;
+        padding: 0;
+        overflow: visible;
+        overflow-x: hidden;
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* LOGO */
+
+.mash-logo-container {
+    position: absolute;
+    top: 25px;
+    left: 20px;
+    z-index: 50;
+}
+
+@media (max-width: 768px) {
+    .mash-logo-container {
+        top: 20px;
+        left: 20px;
+    }
+}
+
+.mash-logo {
+    height: 45px;
+    transition: transform 0.3s ease;
+}
+
+.mash-logo:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .mash-logo {
+        height: 35px;
+    }
+}
+
+/* HERO BG */
+
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    /* z-index: 0; removed to avoid clipping stacking context */
+    height: 100%;
+}
+
+@media (max-width: 1024px) {
+    .hero-bg {
+        position: relative;
+        grid-area: 1 / 1;
+        height: auto;
+    }
+}
+
+/* TOP ROW */
+
+.top-row {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding: 16px;
+    opacity: 0.3;
+}
+
+@media (max-width: 1024px) {
+    .top-row {
+        grid-template-columns: 1fr;
+        height: auto;
+        gap: 20px;
+    }
+}
+
+.gif-card {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 16px;
+}
+
+@media (max-width: 1024px) {
+    .gif-card {
+        aspect-ratio: 16/9;
+        height: auto;
+    }
+}
+
+.gif-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1);
+}
+
+/* BOTTOM ROW */
+
+.bottom-row {
+    height: 46vh;
+    /* FIX HEIGHT */
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: end;
+    position: relative;
+    overflow: visible;
+}
+
+@media (max-width: 1024px) {
+    .bottom-row {
+        height: auto;
+        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+/* SIDE GIF */
+
+.bottom-gif {
+    height: 100%;
+    /* SAME HEIGHT */
+    width: 100%;
+    overflow: hidden;
+}
+
+@media (max-width: 1024px) {
+    .bottom-gif {
+        display: none;
+    }
+}
+
+.bottom-gif img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1);
+    opacity: 0.6;
+}
+
+/* LOTUS */
+
+.lotus-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: visible;
+}
+
+@media (max-width: 1024px) {
+    .lotus-container {
+        height: auto;
+        margin-top: 40px;
+        align-items: flex-start;
+    }
+}
+
+.lotus-video {
+    position: absolute;
+    bottom: -360px;
+    width: 170%;
+    height: auto;
+    object-fit: contain;
+    mix-blend-mode: screen;
+    z-index: 6;
+    /* stay above the linear fade */
+    opacity: 0.55;
+    filter: brightness(1.2) contrast(1.1);
+    pointer-events: none;
+}
+
+@media (max-width: 1024px) {
+    .lotus-video {
+        position: relative;
+        bottom: auto;
+        width: 140%;
+        opacity: 0.6;
+    }
+}
+
+/* Tablet/Mobile refinements already handled in specific classes above */
+/* CONTENT */
+
+.hero-content {
+    position: relative;
+    z-index: 10;
+    max-width: 1000px;
+    text-align: center;
+    padding: 0 20px;
+}
+
+@media (max-width: 1024px) {
+    .hero-content {
+        grid-area: 1 / 1;
+        align-self: center;
+        margin-top: 80px;
+        margin-bottom: 200px;
+        /* Push it up a bit if Lotus is too high */
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-content {
+        padding: 0 16px;
+        margin-top: -50px;
+        /* Slight offset if needed to center over stacked content */
+    }
+
+    .lotus-container {
+        margin-top: -40px;
+        /* Pull up the Lotus on mobile to keep it visible */
+    }
+}
+
+.hero-title {
+    color: white;
+    font-family: 'FFF Acid Grotesk';
+    font-size: clamp(50px, 8vw, 78px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+}
+
+.hero-subtitle-2 {
+    color: white;
+    font-size: 22px;
+    margin-top: 20px;
+    opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+    .hero-subtitle-2 {
+        font-size: 18px;
+    }
+}
+
+.hero-subtitle {
+    color: #ffffff99;
+    font-size: 18px;
+    margin-top: 20px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 768px) {
+    .hero-subtitle {
+        font-size: 14px;
+        margin-top: 15px;
+    }
+}
+
+/* BUTTON */
+
+.hero-button {
+    margin-top: 40px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 24px;
+    border-radius: 12px;
+    border: none;
+    color: white;
+    font-weight: 600;
+    background: radial-gradient(100.88% 63.54% at 50% -13.54%, #CCA4FE 0%, #5556BC 100%);
+    cursor: pointer;
+}
+
+.button-icon-box {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 6px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- MOBILE REFINEMENTS TO MATCH DESIGN --- */
+@media (max-width: 600px) {
+    .hero-container {
+        height: 100svh !important;
+        min-height: 100svh !important;
+        display: flex !important;
+        overflow: hidden !important;
+    }
+
+    .hero-bg {
+        position: absolute !important;
+        inset: 0;
+        height: 100% !important;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .top-row {
+        height: 55% !important;
+        padding: 16px !important;
+        gap: 16px !important;
+        display: flex !important;
+        flex-direction: column;
+    }
+
+    .top-row .gif-card {
+        border-radius: 16px !important;
+        height: auto !important;
+        flex: 1;
+    }
+
+    .top-row .gif-card:nth-child(n+3) {
+        display: none !important;
+    }
+
+    .bottom-row {
+        height: 45% !important;
+        display: flex !important;
+        align-items: flex-end;
+        justify-content: center;
+        position: relative;
+    }
+
+    .lotus-container {
+        margin-top: 0 !important;
+        height: 100% !important;
+        align-items: flex-end !important;
+    }
+
+    .lotus-video {
+        position: absolute !important;
+        bottom: -20px !important;
+        width: 170% !important;
+        opacity: 0.8 !important;
+    }
+
+    .hero-content {
+        position: absolute !important;
+        inset: 0;
+        height: 100% !important;
+        display: flex !important;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 110px 20px 30px 20px !important;
+        margin: 0 !important;
+    }
+
+    .hero-title {
+        font-size: 50px !important;
+        margin-top: 0;
+    }
+
+    .hero-subtitle-2 {
+        display: block !important;
+        font-size: 16px !important;
+        margin-top: 12px !important;
+        width: 80% !important;
+        max-width: 80% !important;
+    }
+
+    .hero-subtitle {
+        font-size: 14px !important;
+        line-height: 1.4 !important;
+        margin-top: 12px !important;
+        width: 90% !important;
+        max-width: 90% !important;
+        color: #ffffffd9 !important;
+    }
+
+    .hero-button {
+        margin-top: auto !important;
+        width: 100%;
+        max-width: 200px;
+        justify-content: center;
+        padding: 10px 24px !important;
+        font-size: 16px;
+    }
+}

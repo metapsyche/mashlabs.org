@@ -1,0 +1,192 @@
+@font-face {
+  font-family: p2p;
+  src: url("/images/PressStart2P-Regular.ttf");
+}
+.get-set-container {
+  // text-align: center;
+  padding: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  // gap: 5vh;
+  // height: 80vh;
+}
+
+.get-set-heading {
+  font-size: 3rem;
+  font-weight: 500;
+  margin-bottom: 50px;
+  margin-top: -1vw;
+}
+
+.steps-container {
+  display: flex;
+  justify-content: space-between;
+  // align-items: center;
+  gap: 20px;
+  // height: 10%;
+}
+
+.step-card {
+  width: 25%;
+  // padding: 20px;
+
+  border-radius: 8px;
+  text-align: center;
+  transition: all 1s ease;
+  position: relative;
+  background-color: #121214;
+}
+
+.number-card {
+  color: #fff;
+  // font-size: 2rem;
+  // padding: 10px;
+  width: 100%;
+  // height: 50%;
+  margin: 0 auto 6vh;
+  background-color: #ccc;
+
+  display: flex;
+  justify-content: center;
+  // align-items: center;
+  position: relative;
+  transition: background-color 1s ease, filter 1s ease;
+}
+
+.number-card-image {
+  position: absolute;
+  bottom: 0px;
+  right: 5px;
+  width: 50%;
+  // height: 55%;
+  object-fit: contain;
+  transition: all 1s ease-in;
+}
+
+.step-content p {
+  font-size: 0.8rem;
+  margin: 0;
+}
+.step-content h3 {
+  font-size: 1vw;
+  font-weight: 500;
+}
+
+.number-card h1 {
+  font-size: 8vw;
+  font-family: p2p;
+  // margin-top: -2vh;
+  color: #d881ff;
+  transform: translate(-50%, -50%);
+  transition: transform 1s ease;
+}
+
+.number-card h1.active {
+  transform: translate(0, 0); /* Move the number to the center when active */
+}
+
+.activeimg {
+  width: 65%;
+}
+
+.get-set-container button {
+  margin-top: 5vh;
+  margin-left: 40%;
+  font-size: 0.8em;
+  padding: 1.1em 3em;
+  background-color: white;
+  color: black;
+  font-weight: 600;
+  width: 20%;
+  border: none !important;
+}
+
+.mint:hover {
+  background: #64ffda;
+}
+
+@media (max-width: 768px) {
+  .get-set-container {
+    height: 70%;
+  }
+  .landing .section {
+    padding: 10px;
+  }
+  .get-set-container button {
+    // margin-top: 3vh;
+    margin-left: 37%;
+    font-size: 0.6em;
+    padding: 1em 1em;
+    background-color: white;
+    color: black;
+    font-weight: 600;
+    width: 30%;
+    border: none !important;
+  }
+
+  .get-set-heading {
+    font-size: 2rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+    margin-top: 0vw;
+  }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1366px) {
+  .get-set-container button {
+    margin-top: 0vh;
+    margin-left: 40%;
+    font-size: 0.6em;
+    padding: 1em 1em;
+    width: 24%;
+    border: none !important;
+  }
+
+  .steps-container {
+    height: 50%;
+  }
+  .get-set-heading {
+    font-size: 3vw;
+  }
+  // .sec{
+  //   height: 55vh;
+  // }
+  // .mediaSection{
+  //   height: 90vh;
+  // }
+}
+
+//mobile
+@media screen and (max-width: 468px) {
+  .steps-container {
+    display: flex;
+    justify-content: space-between;
+    // align-items: center;
+    gap: 25px;
+    flex-wrap: wrap;
+    // height: 10%;
+  }
+
+  .step-card {
+    width: 45%;
+  }
+  .step-content h3 {
+    font-size: 3vw;
+  }
+  .number-card {
+    margin: 0;
+    height: 15vh;
+  }
+  .number-card h1 {
+    transform: translate(-50%, -20%);
+    font-size: 12vw;
+  }
+  .step-content p{
+    font-size: 0.7rem;
+  }
+  .get-set-container button {
+    margin-left: 25%;
+    width: 50%;
+  }
+}

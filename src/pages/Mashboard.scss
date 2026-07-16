@@ -1,0 +1,204 @@
+* {
+  box-sizing: border-box;
+}
+.mashboardPage {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background: #121214;
+}
+
+.loader {
+  height: calc(100vh - 70px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+  font-weight: 500;
+}
+.pageContent {
+  min-height: calc(100vh - 79px);
+  padding: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  a {
+    color: white;
+    font-size: 14px;
+  }
+  .info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    gap: 4px;
+    font-size: 12px;
+    border-radius: 12px;
+    overflow: hidden;
+
+    .heading {
+      font-size: 15px;
+      font-weight: bold;
+      width: 100%;
+      text-align: center;
+      background-color: rgba(255, 255, 255, 0.064);
+      padding: 5px;
+      border-radius: 5px;
+    }
+    .textContainer {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: nowrap;
+      gap: 7px;
+      background-color: rgba(255, 255, 255, 0.064);
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+    .title {
+      display: flex;
+      font-size: 15px;
+      align-items: center;
+      font-weight: bolder;
+    }
+    .subtext {
+      display: block;
+      text-align: end;
+      color: rgb(235, 235, 235);
+      width: 30%;
+      font-size: 15px;
+      font-weight: 600;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    .copyable {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .mints {
+      display: flex;
+      gap: 5px;
+    }
+    .circle {
+      color: gray;
+    }
+  }
+}
+
+.mashboardMain {
+  display: flex;
+  padding-top: 10px;
+  gap: 30px;
+  justify-content: space-between;
+
+  .preview {
+    height: 100%;
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px 0 20px 30px;
+    .mashButton{
+      width: 100%;
+    }
+    .fullbutton{
+      width: 100%;
+      background-color: white;
+      color: black;
+    }
+    .disabled{
+      opacity: .5;
+      pointer-events: none;
+    }
+    .fullbutton:hover{
+      background: black;
+      color: white;
+    }
+  }
+  .content {
+    width: 60%;
+    padding-top: 0px;
+    .separator {
+      background: rgb(86, 89, 90);
+      font-size: 1vh;
+      height: 0.5em;
+      margin: 3em 1em;
+      width: calc(100% - 2em);
+    }
+  }
+}
+@media (max-aspect-ratio: 900/600) {
+  .pageContent {
+    padding: 15px;
+  }
+  .mashboardMain {
+    flex-direction: column;
+
+    .preview {
+      width: 100%;
+      padding: 5px;
+    }
+    .content {
+      width: 100%;
+      padding-top: 0px;
+      .separator {
+        font-size: 1vh;
+        height: 0.5em;
+        margin: 4em 1em;
+        width: calc(100% - 2em);
+      }
+    }
+  }
+}
+
+.mashedPreview {
+  position: relative;
+  width: 100%;
+  font-size: 1vh;
+  img {
+    width: 100%;
+    aspect-ratio: 16/10;
+    // border-radius: 2em;
+    object-fit: cover;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.443);
+  }
+  video {
+    // border-radius: 2em;
+    background-color: rgb(26, 26, 26);
+    width: 100%;
+    aspect-ratio: 16/10;
+    object-fit: cover;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.443);
+  }
+  .controls {
+    z-index: 2;
+    // border-radius: 1em;
+    overflow: hidden;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    gap: 10px;
+    font-size: 15px;
+    color: white;
+
+    .clickable {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+    .darken {
+      background-color: rgba(0, 0, 0, 0.308);
+    }
+    .playpause {
+      display: flex;
+      cursor: pointer;
+      font-size: 30px;
+    }
+  }
+}

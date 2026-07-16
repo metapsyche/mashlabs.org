@@ -1,0 +1,222 @@
+.tutorialOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 110svh;
+  user-select: none;
+
+  background: transparent;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .tutorialContent {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: #121214f1;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    z-index: 1000001;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+  }
+
+  .tutorialContent button {
+    width: 20%;
+    padding: 0.4vw;
+    // margin: auto;
+  }
+
+
+}
+
+
+/* TutorialOverlay.scss */
+.highlighted {
+  border: 2px solid #ff0;
+  /* Example highlighting style */
+  background-color: rgba(255, 255, 0, 0.2);
+  /* Optional: background color */
+}
+
+.tut-main {
+  // height: 100%;
+  width: 100%;
+  position: relative;
+  // z-index: 10000;
+
+  // background: #301f1f;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3vw;
+  gap: 3vw;
+  padding-top: 5vw;
+}
+
+.left-img-div {
+  width: 100%;
+}
+
+.left-img-div img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.tut-left {
+  display: flex;
+  flex-direction: column;
+  gap: 1vw;
+  width: 25%;
+  align-items: center;
+  justify-content: center;
+  // height: 100%;
+  
+}
+.left-con-text{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10px;
+}
+
+
+.btn {
+  padding: 0.8vw;
+  width: 100%;
+}
+
+.left-con {
+  // background: #000;
+  width: 100%;
+  padding: 1vw;
+  background: #1e1e20c5;
+  font-size: 0.7vw;
+  
+}
+
+
+
+
+.tut-right {
+  width: 75%;
+  // background: #000;
+  position: relative;
+  // height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1vw;
+}
+
+.sep {
+  width: 95%;
+}
+
+.tut-r-up {
+  // background: rgb(117, 115, 115);
+  width: 95%;
+  // height: 45%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // border-bottom: 1px solid white;
+  gap: 1vw;
+}
+
+.tut-card {
+  width: 40%;
+  // height: 100%;
+  // background: rgb(61, 14, 14);
+}
+.tut-card img{
+  // height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+
+
+/* General opacity settings for steps */
+.tut-main {
+  &.welcome-more {
+    opacity: 1;
+  }
+
+  &.welcome-less {
+    opacity: 0.6;
+  }
+
+  &.media-selection-more {
+    opacity: 1;
+  }
+
+  &.media-selection-less {
+    opacity: 0.6;
+  }
+
+  &.mash-button-more {
+    opacity: 1;
+  }
+
+  &.mash-button-less {
+    opacity: 0.6;
+  }
+}
+
+
+.tut-main>* {
+  transition: opacity 0.3s ease, z-index 0.3s ease;
+}
+
+.less {
+  opacity: 0.6;
+  z-index: 0;
+}
+
+.more {
+  opacity: 1;
+  position: relative !important;
+  z-index: 10000001 !important;
+
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  // border: 2px solid green;
+  transition: opacity 0.3s ease, z-index 0.3s ease;
+}
+.tut-btn{
+  background: white;
+  color: black;
+}
+
+
+
+
+@media (max-width:468px) {
+  .tut-main{
+    flex-direction: column;
+  }
+  .tut-left{
+    width: 65%;
+  }
+  .tut-right{
+    width: 100%;
+  }
+  .con-tut{
+    width: 100%;
+  }
+  .btn{
+    padding: 2vw;
+  }
+  
+}
+
+

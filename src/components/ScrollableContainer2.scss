@@ -1,0 +1,118 @@
+.scrollableContainer2 {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  font-size: 1vh;
+
+  .scrollControlsContainer {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    width: 100%;
+    overflow: hidden;
+
+    .controls{
+      margin-top: 3em;
+    }
+
+    .dotsContainer {
+      display: flex;
+      justify-content: center;
+    }
+
+    .dot {
+      height: 1.2em;
+      width: 1.2em;
+      margin: 0 0.5em;
+      background-color: #606060;
+      border-radius: 50%;
+      display: inline-block;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .dot.active {
+      background-color: #e7e7e7;
+    }
+  }
+
+  .scrollable {
+    padding: 1em;
+    display: flex;
+    gap: 3em;
+    width: 100%;
+    overflow-x: auto;
+  }
+  ::-webkit-scrollbar {
+    height: 8px;
+    display: none;
+    background-color: #b488ff3f;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #b388ff;
+    cursor: pointer;
+  }
+  .scrollBtn {
+    background: rgb(0, 0, 0);
+    border: 2px solid white;
+    font: 18px;
+    width: 40px;
+    padding: 0;
+    border-radius: 100%;
+    aspect-ratio: 1;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: 200ms;
+  }
+  .resButton{
+    display: none;
+  }
+  .scrollBtn:disabled {
+    opacity: 80%;
+    color: rgb(151, 151, 151);
+    border: 2px solid rgb(151, 151, 151);
+    background-color: #000000;
+    pointer-events: none;
+  }
+  .scrollBtn:hover {
+    background: rgb(38, 38, 38);
+  }
+  .scrollcontrols {
+    width: 100%;
+    justify-content: end;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+  }
+}
+
+
+
+@media only screen and (max-width: 900px) {
+  .scrollableContainer {
+    .resButton{
+      display: flex;
+    }
+    .scrollcontrols {
+      display: none;
+    }
+    .controls{
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      gap: 1em;
+
+      .scrollBtn{
+        font-size: 2.5em;
+        width: 2em;
+      }
+    }
+  }
+}

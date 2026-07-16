@@ -1,0 +1,102 @@
+.nav {
+  width: 100%;
+  top: 0;
+  left: 0;
+  padding: 10px 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 99999;
+}
+.logo {
+  font-size: 20px;
+  font-weight: bolder;
+  height: 35px;
+  cursor: pointer;
+}
+
+.logo > img {
+  width: 100px;
+  margin-top: -2px;
+}
+.connect {
+  padding-right: 5px;
+  .button {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+  .button:hover{
+    background-color: #64ffda;
+    border: 1px solid #64ffda;
+  }
+}
+.icons {
+  display: flex;
+  gap: 10px;
+  .icon {
+    font-size: 10px;
+    background: #343434;
+    opacity: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    width: 80px;
+    border-radius: 2px;
+    .iconIcon {
+      font-size: 25px
+    }
+    transition: 200ms ease-in-out;
+
+  }
+  .active{
+    opacity: 100%;
+    pointer-events: none;
+  }
+  .icon:hover{
+    cursor: pointer;
+    opacity: 90%;
+  }
+}
+.navcontainer {
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.divider {
+  width: calc(100% - 0px);
+  height: 1px;
+  background-color: #626262;
+}
+
+.navcontainer.home {
+  background-color: black;
+}
+
+.navcontainer.other {
+  background-color: #121214;
+}
+
+@media only screen and (max-width: 520px) {
+
+  .nav{
+    padding: 10px;
+    gap: 10px;
+    .icons{
+      gap: 8px;
+      .icon {
+        font-size: 8px;
+        padding: 8px;
+        width: 70px;
+        border-radius: 2px;
+        .iconIcon {
+          font-size: 20px
+        }
+        transition: 200ms ease-in-out;
+    
+      }
+    }
+  }
+}

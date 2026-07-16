@@ -1,0 +1,304 @@
+* {
+  margin: 0;
+}
+
+.Starter-main {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  padding: 1rem;
+  overflow: hidden;
+  position: relative;
+  width: 100vw;
+  background-size: cover;
+  background-position: center;
+}
+
+.Starter-main video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.twitterIcon:hover {
+  cursor: pointer;
+  color: #a987ff;
+}
+
+.instagramIcon:hover {
+  cursor: pointer;
+  color: #a987ff;
+}
+
+.farcaster-icon {
+  position: relative;
+  top: 0.1rem;
+  width: 27px;
+  height: 27px;
+}
+
+.farcaster-icon:hover {
+  opacity: 0.8;
+}
+
+.Starter-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(13, 11, 31, 0.8);
+}
+
+.Starter-content {
+  position: relative;
+  z-index: 10;
+  padding: 20px;
+  max-width: 64rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .logo {
+    height: auto;
+
+    .heroImage {
+      width: 200px;
+      margin-bottom: 3rem;
+    }
+  }
+}
+
+.Starter-title {
+  font-size: 4rem;
+  font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  letter-spacing: -0.05em;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.Starter-subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 4rem;
+  letter-spacing: 0.05em;
+}
+
+.sub2 {
+  margin-bottom: 2.3rem;
+}
+
+.Starter-buttonContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  justify-content: center;
+}
+
+.Starter-button {
+  font-size: 1.125rem;
+  padding: 1rem 2rem;
+  border: 2px solid white;
+  background-color: transparent;
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.Starter-button:hover {
+  background-color: #b5abff;
+}
+
+.Starter-partners {
+  font-size: 1.1rem;
+  margin-bottom: 3rem;
+}
+
+.Starter-link {
+  color: #a78bfa;
+  text-decoration: underline;
+  font-size: 1rem;
+}
+
+.Starter-link:hover {
+  color: #c4b5fd;
+}
+
+.Starter-infoBox {
+  position: absolute;
+  bottom: 5vw;
+  right: 5vh;
+  max-width: 24rem;
+  background-color: rgba(13, 11, 31, 0.95);
+  border: 1px solid #1f2937;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  z-index: 101;
+}
+
+.Starter-closeButton {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.Starter-infoButton {
+  position: absolute;
+  bottom: 25px;
+  right: 1rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  z-index: 19;
+  transition: background-color 0.3s;
+}
+
+.Starter-infoButton:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.starter {
+  z-index: 100;
+  position: absolute;
+  bottom: 3%;
+  left: 3%;
+}
+
+.start-socials {
+  font-size: 1.4rem;
+  margin-right: 1vw;
+}
+
+.credits {
+  position: absolute;
+  bottom: 25px;
+  /* right: 45%; */
+  padding: 10px 10px 10px 25px;
+  font-size: 1rem;
+  color: white;
+  z-index: 100;
+  margin: auto;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+
+
+@media (max-width: 468px) {
+
+  .logo-mob {
+    position: absolute;
+    z-index: 100;
+    top: 2.5rem;
+    left: 1rem;
+
+    .heroImage-mob {
+      width: 100px;
+    }
+  }
+
+  .Starter-infoButton {
+    top: 2.5rem;
+  }
+
+  .Starter-infoBox {
+    top: 10vh;
+    height: 25vh;
+    right: 0;
+  }
+
+  .Starter-content {
+    text-align: center;
+    align-items: flex-start;
+    gap: 0vh;
+
+    .logo {
+      .heroImage {
+        width: 100px;
+        margin-bottom: 8rem;
+        margin-top: -6vh;
+      }
+    }
+  }
+
+  .Starter-con-below {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    // padding-top: 3vh;
+    padding-top: 8vh;
+
+  }
+
+
+  .Starter-title {
+    font-size: 3rem;
+    width: 100%;
+    margin-right: 3px;
+  }
+
+  .Starter-subtitle {
+    font-size: 0.9rem;
+    width: 70%;
+  }
+
+  .Starter-buttonContainer {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .starter {
+    bottom: 1rem;
+    left: 20rem;
+  }
+
+  .Starter-partners {
+    font-size: 0.8rem;
+  }
+
+  .start-socials {
+    font-size: 1.2rem;
+    margin-right: 3vw;
+  }
+
+  .farcaster-icon {
+    top: 0.15rem;
+    width: 24px;
+    height: 25px;
+  }
+
+  .credits {
+    position: absolute;
+    bottom: 10px;
+    left: 0%;
+    padding: 0px 0px 13px 25px;
+    font-size: 0.6rem;
+    color: white;
+    z-index: 100;
+    margin: auto;
+    text-align: center;
+  }
+
+}

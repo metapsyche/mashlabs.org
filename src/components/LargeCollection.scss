@@ -1,0 +1,236 @@
+.largeCollection {
+  position: relative;
+
+  .collectionName {
+    width: 100%;
+    font-size: 45px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  .featured {
+    font-size: 22px;
+    color: lightgray;
+  }
+  .chip {
+    background: gray;
+    background: linear-gradient(45deg, rgb(89, 205, 89), rgb(102, 181, 182));
+    width: max-content;
+    padding: 8px 20px;
+    padding-top: 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    user-select: none;
+  }
+  .collectionChip {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+  }
+  .artist-area {
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .artist-name,
+  .artist-name a {
+    color: white;
+    text-decoration: none;
+  }
+
+  .description {
+    flex: 1;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+  }
+  .descContent {
+    line-height: 25px;
+    width: 100%;
+    display: inline;
+  }
+
+  .learnMore > a {
+    font-size: 20px;
+    color: white;
+    text-wrap: nowrap;
+  }
+
+  .collectionMain {
+    display: flex;
+    padding-top: 60px;
+    gap: 0;
+    gap: 50px;
+  }
+
+  .artContainer {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    width: 100%;
+  }
+
+  .teaserContainer {
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    audio {
+      display: none;
+    }
+    .clickable {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .playpause {
+        font-size: 50px;
+      }
+    }
+    .darken {
+      background-color: rgba(0, 0, 0, 0.363);
+    }
+  }
+
+  .teaserVideo {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+  }
+
+  .moreInfo {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    display: flex;
+    gap: 50px;
+    padding: 50px 0;
+  }
+  .artistInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+
+    .artistDetails {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+
+      .artist-musician {
+        font-size: 24px;
+        font-weight: 900;
+        align-items: center;
+        gap: 10px;
+
+        .artistType {
+          font-size: 20px;
+          margin-top: 5px;
+          color: lightgray;
+        }
+      }
+    }
+
+    .artistInfoAvatar {
+      flex: none;
+      width: 90px;
+      height: 90px;
+      aspect-ratio: 1/1;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+    .artistInfoAvatar > img {
+      width: 100%;
+    }
+
+    .artistType {
+      font-weight: normal;
+    }
+    .artistCountry {
+      padding-top: 5px;
+      color: rgb(199, 199, 199);
+    }
+    .artistDesc {
+      padding-top: 15px;
+      width: 100%;
+      display: -webkit-box;
+      font-weight: 400;
+      color: rgb(235, 235, 235);
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
+      line-height: 30px;
+      overflow: hidden;
+    }
+  }
+
+  .openCollection {
+    flex-direction: column;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+  }
+
+  @media only screen and (max-width: 1000px) {
+    .chip {
+      background: gray;
+      background: linear-gradient(45deg, rgb(89, 205, 89), rgb(102, 181, 182));
+      width: max-content;
+      font-size: 10px;
+      padding: 5px 10px;
+      padding-top: 7px;
+      border-radius: 20px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      user-select: none;
+    }
+    .collectionChip {
+      position: absolute;
+      top: 5px;
+      margin-bottom: 20px;
+    }
+    .collectionMain {
+      flex-direction: column;
+      gap: 10px;
+    }
+    .artistInfo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .artistDetails {
+        align-items: center;
+      }
+      .artist-musician {
+        text-align: center;
+      }
+      .artistDesc {
+        text-align: justify;
+      }
+    }
+    .moreInfo {
+      flex-direction: column;
+    }
+    .artist-area {
+      font-size: 17px;
+    }
+    .collectionName {
+      font-size: 30px;
+    }
+  }
+}
