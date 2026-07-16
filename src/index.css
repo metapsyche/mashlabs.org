@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+@theme {
+  --spacing-15: 3.75rem;
+  --spacing-25: 6.25rem;
+  --spacing-70: 17.5rem;
+}
+
+
 @font-face {
   font-family: 'FFF Acid Grotesk';
   src: url('/Fonts/FFF Acid Grotesk Normal.ttf') format('truetype');
